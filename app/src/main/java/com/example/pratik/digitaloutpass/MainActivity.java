@@ -3,6 +3,7 @@ package com.example.pratik.digitaloutpass;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         LoginStudentFragment fragment = LoginStudentFragment.newInstance("1", "2");
+        FragmentManager manager  = getSupportFragmentManager();
     }
 
     @Override
