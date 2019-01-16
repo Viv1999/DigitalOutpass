@@ -18,9 +18,13 @@ import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LoginStudentFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        LoginStudentFragment.OnFragmentInteractionListener,
+        SignupStudentFragment.OnFragmentInteractionListener,
+        MyOutpassesFragment.OnFragmentInteractionListener {
     private FirebaseAuth mAuth;
 
     @Override
@@ -49,10 +53,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        LoginStudentFragment fragment = LoginStudentFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_main_relative, fragment).commit();
+        FirebaseUser curUser = mAuth.getCurrentUser();
+        if (curUser == null) {
+            SignupStudentFragment signupStudentFragment = SignupStudentFragment.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_main_relative, signupStudentFragment).commit();
+        }
+        //LoginStudentFragment fragment = LoginStudentFragment.newInstance();
     }
 
     @Override
@@ -94,7 +101,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_all_outpasses) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

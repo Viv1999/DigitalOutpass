@@ -3,20 +3,23 @@ package com.example.pratik.digitaloutpass;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PatternMatcher;
+//import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -24,43 +27,54 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LoginStudentFragment.OnFragmentInteractionListener} interface
+ * {@link SignupStudentFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LoginStudentFragment#newInstance} factory method to
+ * Use the {@link SignupStudentFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginStudentFragment extends Fragment implements View.OnClickListener {
-    private OnFragmentInteractionListener mListener;
+public class SignupStudentFragment extends Fragment implements View.OnClickListener{
+    private EditText etEmail;
+    private EditText etPassword;
+    private Button bSignup;
     private FirebaseAuth mAuth;
-    EditText etEmail;
-    EditText etPassword;
-    Button bLogin;
-    public LoginStudentFragment() {
+    private TextView tvGoToLogin;
+
+    private OnFragmentInteractionListener mListener;
+
+    public SignupStudentFragment() {
         // Required empty public constructor
     }
 
-    public static LoginStudentFragment newInstance() {
-        LoginStudentFragment fragment = new LoginStudentFragment();
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment SignupStudentFragment.
+     */
+
+    public static SignupStudentFragment newInstance() {
+        SignupStudentFragment fragment = new SignupStudentFragment();
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //FirebaseApp.initializeApp(getContext());
         mAuth = FirebaseAuth.getInstance();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_login_student, container, false);
-        etEmail = v.findViewById(R.id.etEmailLoginStudent);
-        etPassword = v.findViewById(R.id.etPasswordLoginStudent);
-        bLogin = v.findViewById(R.id.bLogin);
-        bLogin.setOnClickListener(this);
+        View v = inflater.inflate(R.layout.fragment_signup_student, container, false);
+        etEmail = v.findViewById(R.id.etEmailSignupStudent);
+        etPassword = v.findViewById(R.id.etPasswordSignupStudent);
+        tvGoToLogin = v.findViewById(R.id.tvGoToLogin);
+        bSignup = v.findViewById(R.id.bSignupStudent);
+        bSignup.setOnClickListener(this);
+        tvGoToLogin.setOnClickListener(this);
         return  v;
     }
 
@@ -91,13 +105,26 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.bLogin:
-                clickOnLogin();
+            case R.id.bSignupStudent:
+                clickOnSignup();
+                break;
+            case R.id.tvGoToLogin:
+                goToLogin();
                 break;
         }
+
     }
 
-    private void clickOnLogin(){
+    private void goToLogin() {
+        Fragment fragment = LoginStudentFragment.newInstance();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content_main_relative, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void clickOnSignup() {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString();
         //Toast.makeText(getContext(), "Email: "+email, Toast.LENGTH_SHORT).show();
@@ -119,23 +146,18 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
             etPassword.setError("Password length should be greater than 6");
             etPassword.requestFocus();
         }
-        else{
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        else {
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
-
-                    }
-                    else{
-                        Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
-
-
     }
+    
 
     /**
      * This interface must be implemented by activities that contain this
