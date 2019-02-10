@@ -1,9 +1,13 @@
 package com.example.pratik.digitaloutpass;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -19,13 +23,21 @@ import android.view.MenuItem;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LoginStudentFragment.OnFragmentInteractionListener,
         SignupStudentFragment.OnFragmentInteractionListener,
-        MyOutpassesFragment.OnFragmentInteractionListener {
+        MyOutpassesFragment.OnFragmentInteractionListener,
+        View.OnClickListener{
     private FirebaseAuth mAuth;
+    FragmentManager fragmentManager;
+    FirebaseUser curUser;
+    private static int SPLASH_TIME_OUT = 400;
+    FloatingActionButton fab;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +45,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
+        curUser = mAuth.getCurrentUser();
+        //if(curUser==null){
+       // }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -54,10 +69,17 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         FirebaseUser curUser = mAuth.getCurrentUser();
+        fab  = findViewById(R.id.fab);
+        fab.setOnClickListener(this);
+        fragmentManager = getSupportFragmentManager();
         if (curUser == null) {
+            fab.hide();
             SignupStudentFragment signupStudentFragment = SignupStudentFragment.newInstance();
-            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_main_relative, signupStudentFragment).commit();
+        }
+        else{
+            MyOutpassesFragment outpassesFragment = MyOutpassesFragment.newInstance();
+            fragmentManager.beginTransaction().replace(R.id.content_main_relative, outpassesFragment).commit();
         }
         //LoginStudentFragment fragment = LoginStudentFragment.newInstance();
     }
@@ -101,6 +123,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_all_outpasses) {
+            MyOutpassesFragment outpassesFragment = MyOutpassesFragment.newInstance();
+            fragmentManager.beginTransaction().replace(R.id.content_main_relative, outpassesFragment).commit();
 
         } else if (id == R.id.nav_gallery) {
 
@@ -123,4 +147,31 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    @Override
+    public void switchFragment() {
+        Fragment fragment = fragmentManager.findFragmentById(R.id.content_main_relative);
+        if(fragment instanceof LoginStudentFragment){
+            SignupStudentFragment signupStudentFragment = SignupStudentFragment.newInstance();
+            fragmentManager.beginTransaction().replace(R.id.content_main_relative, signupStudentFragment).commit();
+        }
+        else if(fragment instanceof SignupStudentFragment){
+            LoginStudentFragment loginStudentFragment = LoginStudentFragment.newInstance();
+            fragmentManager.beginTransaction().replace(R.id.content_main_relative, loginStudentFragment).commit();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.fab:
+                createNewOutpass();
+                break;
+        }
+    }
+
+    private void createNewOutpass() {
+        
+    }
+
 }

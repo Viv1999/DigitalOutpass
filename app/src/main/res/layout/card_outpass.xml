@@ -6,6 +6,8 @@
     app:cardCornerRadius="12sp"
     android:elevation="12dp"
     app:contentPadding="12dp"
+    android:layout_marginVertical="12dp"
+    app:cardElevation="12dp"
     >
     <RelativeLayout
         android:layout_width="match_parent"

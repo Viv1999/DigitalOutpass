@@ -1,6 +1,7 @@
 package com.example.pratik.digitaloutpass;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 /**
@@ -40,6 +43,9 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
     private TextView tvGoToLogin;
 
     private OnFragmentInteractionListener mListener;
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference users;
 
     public SignupStudentFragment() {
         // Required empty public constructor
@@ -62,6 +68,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+        //users = database.getReference('')
     }
 
     @Override
@@ -116,17 +123,12 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
     }
 
     private void goToLogin() {
-        Fragment fragment = LoginStudentFragment.newInstance();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content_main_relative, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        mListener.switchFragment();
     }
 
     private void clickOnSignup() {
-        String email = etEmail.getText().toString().trim();
-        String password = etPassword.getText().toString();
+        final String email = etEmail.getText().toString().trim();
+        final String password = etPassword.getText().toString();
         //Toast.makeText(getContext(), "Email: "+email, Toast.LENGTH_SHORT).show();
 
         //Toast.makeText(getContext(), email.length()+"", Toast.LENGTH_SHORT).show();
@@ -152,6 +154,15 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getContext(), MainActivity.class));
+                                }
+                            }
+                        });
                     }
                 }
             });
@@ -172,5 +183,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+
+        void switchFragment();
     }
 }

@@ -1,17 +1,21 @@
 package com.example.pratik.digitaloutpass;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PatternMatcher;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +39,7 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
     EditText etEmail;
     EditText etPassword;
     Button bLogin;
+    TextView tvGotToSignup;
     public LoginStudentFragment() {
         // Required empty public constructor
     }
@@ -61,6 +66,8 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
         etPassword = v.findViewById(R.id.etPasswordLoginStudent);
         bLogin = v.findViewById(R.id.bLogin);
         bLogin.setOnClickListener(this);
+        tvGotToSignup = v.findViewById(R.id.tvGoToSignup);
+        tvGotToSignup.setOnClickListener(this);
         return  v;
     }
 
@@ -94,7 +101,14 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
             case R.id.bLogin:
                 clickOnLogin();
                 break;
+            case R.id.tvGoToSignup:
+                gotToSignup();
+                break;
         }
+    }
+
+    private void gotToSignup() {
+        mListener.switchFragment();
     }
 
     private void clickOnLogin(){
@@ -125,6 +139,7 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getContext(), MainActivity.class));
 
                     }
                     else{
@@ -150,5 +165,6 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void switchFragment();
     }
 }
