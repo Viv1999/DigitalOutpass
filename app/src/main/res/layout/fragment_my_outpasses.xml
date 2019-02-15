@@ -3,18 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyOutpassesFragment">
+    tools:context=".MyOutpassesFragment"
+    android:orientation="vertical">
 
 
-   <android.support.v7.widget.RecyclerView
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:id="@+id/rvMyOutpasses">
+    <TextView
+        android:id="@+id/tvNoOutpasses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:text="You got no outpasses!" />
 
-
-
-   </android.support.v7.widget.RecyclerView>
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvMyOutpasses"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
 
 </LinearLayout>

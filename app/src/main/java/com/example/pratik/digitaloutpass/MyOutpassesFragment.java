@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +32,8 @@ public class MyOutpassesFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private RecyclerView rView;
     DatabaseReference database;
+    ArrayList<Outpass> outpasses;
+    TextView tvNoOutpasses;
 
     public MyOutpassesFragment() {
         // Required empty public constructor
@@ -58,6 +62,7 @@ public class MyOutpassesFragment extends Fragment {
         if (getArguments() != null) {
 
         }
+        outpasses = new ArrayList<>();
     }
 
     @Override
@@ -66,11 +71,20 @@ public class MyOutpassesFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_outpasses, container, false);
         rView = v.findViewById(R.id.rvMyOutpasses);
+        tvNoOutpasses = v.findViewById(R.id.tvNoOutpasses);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rView.setLayoutManager(layoutManager);
-        OutpassesRViewAdapter adapter = new OutpassesRViewAdapter(getContext());
+        OutpassesRViewAdapter adapter = new OutpassesRViewAdapter(getContext(), outpasses);
         rView.setAdapter(adapter);
-
+        //outpasses.add(new Outpass());
+        if(outpasses.isEmpty()){
+            tvNoOutpasses.setVisibility(View.VISIBLE);
+            rView.setVisibility(View.GONE);
+        }
+        else{
+            tvNoOutpasses.setVisibility(View.GONE);
+            rView.setVisibility(View.VISIBLE);
+        }
         return v;
     }
 
@@ -115,6 +129,7 @@ public class MyOutpassesFragment extends Fragment {
 
     class OutpassesRViewAdapter extends RecyclerView.Adapter<OutpassesRViewAdapter.OutpassesVHolder>{
         Context context;
+        ArrayList<Outpass> outpasses;
 
         @NonNull
         @Override
@@ -131,11 +146,12 @@ public class MyOutpassesFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return 10;
+            return  outpasses.size();
         }
 
-        OutpassesRViewAdapter(Context ctx){
+        OutpassesRViewAdapter(Context ctx, ArrayList<Outpass> outpasses){
             context = ctx;
+            this.outpasses = outpasses;
         }
         class OutpassesVHolder extends RecyclerView.ViewHolder{
             TextView tvTo;

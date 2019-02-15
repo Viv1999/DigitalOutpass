@@ -24,6 +24,10 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        Intent intent = getIntent();
+        int classId = intent.getIntExtra("CLASS_NAME", -1);
+
+
         mAuth = FirebaseAuth.getInstance();
         curUser = mAuth.getCurrentUser();
         if(curUser!=null) {
@@ -33,13 +37,17 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
         else {
             final LoginStudentFragment loginStudentFragment = LoginStudentFragment.newInstance();
             final FragmentManager fragmentManager = getSupportFragmentManager();
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    fragmentManager.beginTransaction().replace(R.id.SSConstraintLayout, loginStudentFragment).commit();
-                }
-            }, SPLASH_TIME_OUT);
+            if(intent==null || classId==1){
+                fragmentManager.beginTransaction().replace(R.id.SSConstraintLayout, loginStudentFragment).commit();
+            }
+            else {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragmentManager.beginTransaction().replace(R.id.SSConstraintLayout, loginStudentFragment).commit();
+                    }
+                }, SPLASH_TIME_OUT);
+            }
         }
     }
 

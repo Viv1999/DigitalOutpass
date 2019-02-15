@@ -1,13 +1,13 @@
 package com.example.pratik.digitaloutpass;
 
-public class Student {
+public class Student extends User{
     private static int curRegId=0;
     final int regId;
     int enrollNo;
-    String name;
+    //String name;
     String batch;
     String branch;
-    String email;
+    //String email;
     public Student(){
         this.regId = curRegId++;
     }

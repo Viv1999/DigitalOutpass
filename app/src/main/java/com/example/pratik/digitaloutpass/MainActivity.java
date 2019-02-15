@@ -10,6 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +21,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -107,10 +112,16 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id){
+            case R.id.logout:
+                mAuth.signOut();
+                Toast.makeText(this, "User sigout out", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SplashScreen.class).putExtra("CLASS_NAME", 1));
+                finish();
+                return true;
+            case R.id.action_settings:
+                return true;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -171,7 +182,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void createNewOutpass() {
-        
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View v = inflater.inflate(R.layout.new_outpass,null);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setView(v);
+        dialogBuilder.setTitle("Create new outpass");
+        final AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+
+        TextView tvFrom;
+        TextView tvLeaveDate;
+        TextView tvReturnDate;
+        TextView tvTo;
+        tvFrom = v.findViewById(R.id.tvFromCardOutpass);
+        tvTo = v.findViewById(R.id.tvToCardOutpass);
+        tvLeaveDate = v.findViewById(R.id.tvLeaveDateCardOutpass);
+        tvReturnDate = v.findViewById(R.id.tvRetDateCardOutpass);
+
+        Button bCreateOutpass = v.findViewById(R.id.bCreateOutpass);
+        bCreateOutpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
 }
