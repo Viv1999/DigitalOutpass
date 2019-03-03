@@ -15,6 +15,8 @@
         android:layout_marginTop="249dp"
         android:ems="10"
         android:hint="Enter email"
+        android:drawableStart="@drawable/email"
+        android:drawablePadding="5dp"
         android:inputType="textPersonName" />
 
     <EditText
@@ -26,6 +28,8 @@
         android:layout_marginStart="92dp"
         android:layout_marginBottom="271dp"
         android:ems="10"
+        android:drawableStart="@drawable/password_lock"
+        android:drawablePadding="5dp"
         android:hint="Enter password"
         android:inputType="textPassword" />
 
@@ -37,6 +41,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="148dp"
         android:layout_marginBottom="173dp"
+
         android:text="Sign up" />
 
     <TextView
@@ -49,4 +54,5 @@
         android:layout_marginBottom="127dp"
         android:text="Already a user? Login"
         android:textSize="24sp" />
+
 </RelativeLayout>

@@ -1,113 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-
-        <TextView
-            android:id="@+id/tvFromLabelCardOutpass"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="75dp"
-            android:layout_marginTop="10dp"
-            android:text="From" />
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvToLabelCardOutpass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="86dp"
-            android:layout_marginTop="61dp"
-            android:text="To" />
+            <TextView
+                android:id="@+id/tvFromLabelCardOutpass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="10dp"/>
 
-        <TextView
-            android:id="@+id/tvFromCardOutpass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="251dp"
-            android:layout_marginTop="72dp" />
+            <EditText
+                android:id="@+id/etFromCardOutpass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Enter the source"
+                android:inputType="textPersonName" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvToCardOutpass"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="257dp"
-            android:layout_marginTop="117dp" />
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvLeaveDateLabelCardOutpass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="105dp"
-            android:text="Leave date" />
+            <TextView
+                android:id="@+id/tvToLabelCardOutpass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="10dp"/>
 
-        <TextView
-            android:id="@+id/tvRetDateLabelCardOutpass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="65dp"
-            android:layout_marginTop="144dp"
-            android:text="Return Date" />
+            <EditText
+                android:id="@+id/etToCardOutpass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Enter the distination"
 
-        <TextView
-            android:id="@+id/tvLeaveDateCardOutpass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="232dp"
-            android:layout_marginTop="107dp"
-            android:text="Return Date" />
+                android:inputType="textPersonName" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvRetDateCardOutpass"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="228dp"
-            android:layout_marginTop="147dp"
-            android:text="Return Date" />
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvLeaveDateLabelCardOutpass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Leave date"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="10dp"/>
+
+            <EditText
+                android:id="@+id/etLeaveDateCardOutpass"
+                android:layout_width="214dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter leave date"
+                android:inputType="date|none"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvLeaveDateCardOutpass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Return Date"
+                android:layout_marginHorizontal="10dp"/>
+
+            <EditText
+                android:id="@+id/etReturnDateCardOutpass"
+                android:layout_width="214dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter return date"
+                android:inputType="date|none"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+        <!--<TextView-->
+        <!--android:id="@+id/tvFromCardOutpass"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginStart="251dp"-->
+        <!--android:layout_marginTop="72dp" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/tvToCardOutpass"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginStart="257dp"-->
+        <!--android:layout_marginTop="117dp" />-->
+
 
         <Button
             android:id="@+id/bCreateOutpass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="198dp"
+            android:layout_gravity="center_horizontal"
             android:text="Create outpass" />
-
-        <EditText
-            android:id="@+id/etLeaveDateCardOutpass"
-            android:layout_width="74dp"
-            android:layout_height="22dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="138dp"
-            android:layout_marginBottom="603dp"
-            android:ems="10"
-            android:inputType="date" />
-
-
-    </RelativeLayout>
-
+    </LinearLayout>
 </android.support.v7.widget.CardView>

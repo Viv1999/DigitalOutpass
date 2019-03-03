@@ -4,17 +4,26 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -34,6 +43,8 @@ public class MyOutpassesFragment extends Fragment {
     DatabaseReference database;
     ArrayList<Outpass> outpasses;
     TextView tvNoOutpasses;
+    DatabaseReference outpassesRef;
+    FirebaseUser curUser;
 
     public MyOutpassesFragment() {
         // Required empty public constructor
@@ -59,10 +70,13 @@ public class MyOutpassesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = FirebaseDatabase.getInstance().getReference();
+        outpassesRef = FirebaseDatabase.getInstance().getReference("outpasses");
+        outpasses = new ArrayList<>();
+        curUser = FirebaseAuth.getInstance().getCurrentUser();
         if (getArguments() != null) {
 
         }
-        outpasses = new ArrayList<>();
+
     }
 
     @Override
@@ -74,9 +88,8 @@ public class MyOutpassesFragment extends Fragment {
         tvNoOutpasses = v.findViewById(R.id.tvNoOutpasses);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         rView.setLayoutManager(layoutManager);
-        OutpassesRViewAdapter adapter = new OutpassesRViewAdapter(getContext(), outpasses);
+        final OutpassesRViewAdapter adapter = new OutpassesRViewAdapter(getContext(), outpasses);
         rView.setAdapter(adapter);
-        //outpasses.add(new Outpass());
         if(outpasses.isEmpty()){
             tvNoOutpasses.setVisibility(View.VISIBLE);
             rView.setVisibility(View.GONE);
@@ -85,6 +98,37 @@ public class MyOutpassesFragment extends Fragment {
             tvNoOutpasses.setVisibility(View.GONE);
             rView.setVisibility(View.VISIBLE);
         }
+        outpassesRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                outpasses.clear();
+                for(DataSnapshot outpassesSnapshot : dataSnapshot.getChildren()){
+                    Outpass curOutpass = outpassesSnapshot.getValue(Outpass.class);
+                    Log.d("datasnapshot", curOutpass.toString());
+                    if(curOutpass.personName.equals(curUser.getUid())){
+                        Log.d("Outpass", "onDataChange: outpass matched" + curOutpass.toString());
+                        outpasses.add(curOutpass);
+                    }
+                }
+
+                if(outpasses.isEmpty()){
+                    tvNoOutpasses.setVisibility(View.VISIBLE);
+                    rView.setVisibility(View.GONE);
+                }
+                else{
+                    tvNoOutpasses.setVisibility(View.GONE);
+                    rView.setVisibility(View.VISIBLE);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        //outpasses.add(new Outpass());
+
         return v;
     }
 

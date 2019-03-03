@@ -7,11 +7,23 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
+import android.widget.EditText;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
+    EditText etLeaveDate;
+    Calendar calendar;
+
+    static DatePickerFragment newInstance(EditText etLeaveDate, Calendar calendar){
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.etLeaveDate = etLeaveDate;
+        datePickerFragment.calendar = calendar;
+        return datePickerFragment;
+    }
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -25,6 +37,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
+        etLeaveDate.setText(dayOfMonth+ "/"+month+"/"+ year);
+        calendar.set(year, month, dayOfMonth);
     }
 }
