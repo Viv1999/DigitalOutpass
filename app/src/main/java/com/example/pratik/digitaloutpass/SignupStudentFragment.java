@@ -41,6 +41,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
     private Button bSignup;
     private FirebaseAuth mAuth;
     private TextView tvGoToLogin;
+    DatabaseReference userDatabase;
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,6 +69,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+        userDatabase = FirebaseDatabase.getInstance().getReference("users");
         //users = database.getReference('')
     }
 
@@ -154,6 +156,10 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                        String newUserKey = userDatabase.push().getKey();
+                        User newUser = new User(newUserKey, email.substring(0, email.indexOf('@')), User.STUDENT, email, 0);
+                        newUser = new Student(newUserKey, null, User.STUDENT, email, -1, -1, null, null);
+                        userDatabase.child(newUserKey).setValue(newUser);
                         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {

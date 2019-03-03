@@ -10,6 +10,7 @@ public class User {
     String role;
     String email;
     long phoneNo;
+    boolean isEmailVerified = false;
 
     public User(String id, String name, String role, String email, long phoneNo) {
         this.id = id;

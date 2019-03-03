@@ -11,13 +11,13 @@ public class Student extends User{
     public Student(){
         this.regId = curRegId++;
     }
-    public Student(int enrollNo, String name, String batch, String branch, String email){
+
+    public Student(String id, String name, String role, String email, long phoneNo, int enrollNo, String batch, String branch) {
+        super(id, name, role, email, phoneNo);
+        this.regId = curRegId++;
         this.enrollNo = enrollNo;
-        this.name = name;
         this.batch = batch;
         this.branch = branch;
-        this.email = email;
-        this.regId = curRegId++;
     }
 
     public int getEnrollNo() {
