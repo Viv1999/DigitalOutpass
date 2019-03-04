@@ -1,5 +1,7 @@
 package com.example.pratik.digitaloutpass;
 
+import java.util.ArrayList;
+
 public class Student extends User{
     private static int curRegId=0;
     final int regId;
@@ -8,6 +10,7 @@ public class Student extends User{
     String batch;
     String branch;
     //String email;
+    ArrayList<String> myOutpasses;
     public Student(){
         this.regId = curRegId++;
     }
