@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +20,7 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
     private FirebaseAuth mAuth;
     FragmentManager fragmentManager;
     FirebaseUser curUser;
+    TextView tvLabel;
     private static int SPLASH_TIME_OUT = 4000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +30,7 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
         Intent intent = getIntent();
         int classId = intent.getIntExtra("CLASS_NAME", -1);
 
-
+        tvLabel = findViewById(R.id.tvLabel);
         mAuth = FirebaseAuth.getInstance();
         curUser = mAuth.getCurrentUser();
         if(curUser!=null) {
@@ -38,12 +41,14 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
             final LoginStudentFragment loginStudentFragment = LoginStudentFragment.newInstance();
             final FragmentManager fragmentManager = getSupportFragmentManager();
             if(intent==null || classId==1){
+                tvLabel.setVisibility(View.GONE);
                 fragmentManager.beginTransaction().replace(R.id.SSConstraintLayout, loginStudentFragment).commit();
             }
             else {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        tvLabel.setVisibility(View.GONE);
                         fragmentManager.beginTransaction().replace(R.id.SSConstraintLayout, loginStudentFragment).commit();
                     }
                 }, SPLASH_TIME_OUT);

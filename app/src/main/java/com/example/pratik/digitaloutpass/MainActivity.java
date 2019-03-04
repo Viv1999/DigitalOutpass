@@ -33,6 +33,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         LoginStudentFragment.OnFragmentInteractionListener,
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference outpassesRef = FirebaseDatabase.getInstance().getReference("outpasses");
+    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,14 +199,40 @@ public class MainActivity extends AppCompatActivity
         tvTo = v.findViewById(R.id.tvToCardOutpass);
         tvLeaveDate = v.findViewById(R.id.tvLeaveDateCardOutpass);
         tvReturnDate = v.findViewById(R.id.tvRetDateCardOutpass);
-        EditText etLeaveDate = v.findViewById(R.id.etLeaveDateCardOutpass);
-
+        final EditText etTo = v.findViewById(R.id.etToCardOutpass);
+        final EditText etFrom = v.findViewById(R.id.etFromCardOutpass);
+        final EditText etLeaveDate = v.findViewById(R.id.etLeaveDateCardOutpass);
+        final EditText etReturnDate = v.findViewById(R.id.etReturnDateCardOutpass);
+        etReturnDate.setKeyListener(null);
+        etLeaveDate.setKeyListener(null);
+        etLeaveDate.requestFocus();
+        final Calendar leaveDateCal = Calendar.getInstance();
+        final Calendar returnDateCal = Calendar.getInstance();
         Button bCreateOutpass = v.findViewById(R.id.bCreateOutpass);
         bCreateOutpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment datePicker = new DatePickerFragment();
+                String to = etTo.getText().toString().trim();
+                String from  = etFrom.getText().toString().trim();
+                Date leaveDate = leaveDateCal.getTime();
+                Date returnDate = returnDateCal.getTime();
+                Outpass outpass = new Outpass(curUser.getUid(), to, from, leaveDate, returnDate);
+                outpassesRef.child(outpass.getId()+"").setValue(outpass);
+                dialog.dismiss();
+            }
+        });
+        etLeaveDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment datePicker = DatePickerFragment.newInstance(etLeaveDate, leaveDateCal);
                 datePicker.show(getSupportFragmentManager(), "datePicker");
+            }
+        });
+        etReturnDate.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(etReturnDate, returnDateCal);
+                datePickerFragment.show(getSupportFragmentManager(), "datePicker");
             }
         });
 
