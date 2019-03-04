@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingTop="150dp"
+    android:gravity="top"
+    tools:context=".VerificationFragment">
+
+
+    <TextView
+        android:id="@+id/tvEmailVer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Emai Not Verified (Click to verify)"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWardenVer"
+        android:text="Hang tight Warden verification in progress"
+        android:textSize="24sp"/>
+
+    <Button
+        android:id="@+id/btnsignOutVer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SignOut" />
+
+</LinearLayout>

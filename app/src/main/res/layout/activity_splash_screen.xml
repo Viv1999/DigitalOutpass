@@ -16,7 +16,7 @@
         android:layout_marginEnd="135dp"
         android:text="Digital Outpass"
         android:textAlignment="center"
-        android:textColor="#ED5808"
+        android:textColor="#5E2B10"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

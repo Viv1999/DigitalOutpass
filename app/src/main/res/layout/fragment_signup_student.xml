@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="100dp"
+    android:paddingTop="150dp"
+    android:gravity="top"
     tools:context=".SignupStudentFragment">
+
+    <EditText
+        android:id="@+id/etNameStudent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+
+
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/etEmailSignupStudent"
@@ -11,12 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="91dp"
-        android:layout_marginTop="249dp"
+
         android:ems="10"
         android:hint="Enter email"
-        android:drawableStart="@drawable/email"
-        android:drawablePadding="5dp"
         android:inputType="textPersonName" />
 
     <EditText
@@ -25,13 +38,108 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="92dp"
-        android:layout_marginBottom="271dp"
+
         android:ems="10"
-        android:drawableStart="@drawable/password_lock"
-        android:drawablePadding="5dp"
         android:hint="Enter password"
         android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/etEnrollStudent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:ems="10"
+        android:hint="Enrollment Number"
+        android:inputType="number" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvbatch"
+            android:text="Batch"/>
+        <Spinner
+            android:id="@+id/spBatchStudent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+
+            android:dropDownWidth="wrap_content"
+            android:hint="Batch"
+            android:minWidth="50dp"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvbranch"
+            android:text="Branch"/>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spBranchStudent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+
+            android:hint="Branch"
+            android:spinnerMode="dropdown"/>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvHostel"
+            android:text="Hostel"/>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spHostelStudent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+
+            android:hint="Hostel"
+            android:spinnerMode="dropdown"/>
+
+
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etPhoneStudent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="number"/>
+
+
 
     <Button
         android:id="@+id/bSignupStudent"
@@ -39,10 +147,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="148dp"
-        android:layout_marginBottom="173dp"
 
         android:text="Sign up" />
+
 
     <TextView
         android:id="@+id/tvGoToLogin"
@@ -50,9 +157,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="86dp"
-        android:layout_marginBottom="127dp"
+
         android:text="Already a user? Login"
         android:textSize="24sp" />
-
-</RelativeLayout>
+</LinearLayout>
