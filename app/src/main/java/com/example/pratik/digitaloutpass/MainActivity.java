@@ -2,6 +2,7 @@ package com.example.pratik.digitaloutpass;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         SignupStudentFragment.OnFragmentInteractionListener,
         MyOutpassesFragment.OnFragmentInteractionListener,
         View.OnClickListener{
+    public static final String CUR_OUTPASS_ID_KEY = "CUR_OUTPASS_ID";
     private FirebaseAuth mAuth;
     FragmentManager fragmentManager;
     FirebaseUser curUser;
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference outpassesRef = FirebaseDatabase.getInstance().getReference("outpasses");
     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+    DatabaseReference curOutpassIdRef = FirebaseDatabase.getInstance().getReference("curOutpassId");
+    SharedPreferences sharedPreferences;
     DatabaseReference myOutpassesRef;
     ArrayList<String> myOutpasses;
 
@@ -63,6 +67,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
+        sharedPreferences = this.getSharedPreferences("com.example.pratik.digitaloutpass", MODE_PRIVATE);
+        Outpass.curId = sharedPreferences.getInt(CUR_OUTPASS_ID_KEY, 0);
         myOutpasses = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         curUser = mAuth.getCurrentUser();
@@ -74,6 +80,19 @@ public class MainActivity extends AppCompatActivity
                 for (DataSnapshot myOutpass: dataSnapshot.getChildren()){
                     myOutpasses.add(myOutpass.getValue(String.class));
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        curOutpassIdRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                sharedPreferences.edit().putInt(CUR_OUTPASS_ID_KEY, dataSnapshot.getValue(Integer.class));
+                Outpass.curId = dataSnapshot.getValue(Integer.class);
             }
 
             @Override
@@ -249,6 +268,7 @@ public class MainActivity extends AppCompatActivity
                 myOutpasses.add(outpass.getId()+"");
                 myOutpassesRef.setValue(myOutpasses);
                 outpassesRef.child(outpass.getId()+"").setValue(outpass);
+                curOutpassIdRef.setValue(new Integer(Outpass.curId));
                 dialog.dismiss();
             }
         });

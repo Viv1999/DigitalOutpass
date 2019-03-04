@@ -3,7 +3,7 @@ package com.example.pratik.digitaloutpass;
 import java.util.Date;
 
 public class Outpass {
-    private static int curId = 0;
+    public static int curId = 0;
     private int id;
     String personName;
     String to;
