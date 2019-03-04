@@ -173,6 +173,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void gotoVerify() {
+
+        VerificationFragment verificationFragment = VerificationFragment.newInstance();
+        fragmentManager.beginTransaction().replace(R.id.content_main_relative, verificationFragment).commit();
+    }
+
     @Override
     public void onClick(View v) {
         switch(v.getId()){

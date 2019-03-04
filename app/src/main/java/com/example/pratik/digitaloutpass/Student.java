@@ -7,17 +7,19 @@ public class Student extends User{
     //String name;
     String batch;
     String branch;
+    String hostel;
     //String email;
     public Student(){
         this.regId = curRegId++;
     }
 
-    public Student(String id, String name, String role, String email, long phoneNo, int enrollNo, String batch, String branch) {
+    public Student(String id, String name, String role, String email, long phoneNo, int enrollNo, String batch, String branch, String hostel) {
         super(id, name, role, email, phoneNo);
         this.regId = curRegId++;
         this.enrollNo = enrollNo;
         this.batch = batch;
         this.branch = branch;
+        this.hostel = hostel;
     }
 
     public int getEnrollNo() {
@@ -58,5 +60,13 @@ public class Student extends User{
 
     public void setBranch(String branch) {
         this.branch = branch;
+    }
+
+    public String getHostel() {
+        return hostel;
+    }
+
+    public void setHostel(String hostel) {
+        this.hostel = hostel;
     }
 }

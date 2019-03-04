@@ -139,7 +139,13 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getContext(), MainActivity.class));
+
+                        //startActivity(new Intent(getContext(), MainActivity.class));
+                        VerificationFragment verificationFragment = new VerificationFragment();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.SSConstraintLayout, verificationFragment, "findThisFragment")
+                                .addToBackStack(null)
+                                .commit();
 
                     }
                     else{

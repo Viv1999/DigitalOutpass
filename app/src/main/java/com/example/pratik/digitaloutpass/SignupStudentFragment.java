@@ -55,10 +55,13 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
     DatabaseReference userDatabase;
     private Spinner spBranch;
     private Spinner spBatch;
+    private Spinner spHostel;
     private String branch;
     private String batch;
+    private String hostel;
     private List<String> years;
     private List<String> branches;
+    private List<String> hostels;
 
     private OnFragmentInteractionListener mListener;
 
@@ -102,6 +105,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
         etEnroll = v.findViewById(R.id.etEnrollStudent);
         spBatch = v.findViewById(R.id.spBatchStudent);
         spBranch = v.findViewById(R.id.spBranchStudent);
+        spHostel = v.findViewById(R.id.spHostelStudent);
         etPhone = v.findViewById(R.id.etPhoneStudent);
         etName = v.findViewById(R.id.etNameStudent);
         tvGoToLogin = v.findViewById(R.id.tvGoToLogin);
@@ -110,6 +114,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
         tvGoToLogin.setOnClickListener(this);
         spBranch.setOnItemSelectedListener(this);
         spBatch.setOnItemSelectedListener(this);
+        spHostel.setOnItemSelectedListener(this);
 
         Date today = new Date(); // Fri Jun 17 14:54:28 PDT 2016
         Calendar cal = Calendar.getInstance();
@@ -141,10 +146,21 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
         ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, branches);
 
         // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
         spBranch.setAdapter(dataAdapter1);
+
+        hostels = new ArrayList<String>();
+        hostels.add("Raman House");
+        hostels.add("Bhabha House");
+        hostels.add("Bose House");
+
+        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, hostels);
+
+        dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spHostel.setAdapter(dataAdapter2);
         return  v;
     }
 
@@ -223,16 +239,21 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
-                        String newUserKey = userDatabase.push().getKey();
+                        String newUserKey = mAuth.getCurrentUser().getUid();
                         User newUser = new User(newUserKey, email.substring(0, email.indexOf('@')), User.STUDENT, email, phone);
-                        newUser = new Student(newUserKey, name, User.STUDENT, email, phone, enroll, batch, branch);
+                        newUser = new Student(newUserKey, name, User.STUDENT, email, phone, enroll, batch, branch, hostel);
                         userDatabase.child(newUserKey).setValue(newUser);
                         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
                                     Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getContext(), MainActivity.class));
+                                    //startActivity(new Intent(getContext(), MainActivity.class));
+                                    VerificationFragment verificationFragment = new VerificationFragment();
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.SSConstraintLayout, verificationFragment, "findThisFragment")
+                                            .addToBackStack(null)
+                                            .commit();
                                 }
                             }
                         });
@@ -254,6 +275,10 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
         {
             //do this
             branch = parent.getItemAtPosition(position).toString();
+        }
+        else if(parent.getId() == R.id.spHostelStudent){
+
+            hostel = parent.getItemAtPosition(position).toString();
         }
 
 

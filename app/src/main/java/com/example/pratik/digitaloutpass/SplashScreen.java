@@ -16,7 +16,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SplashScreen extends AppCompatActivity implements LoginStudentFragment.OnFragmentInteractionListener,
         SignupStudentFragment.OnFragmentInteractionListener,
-        MyOutpassesFragment.OnFragmentInteractionListener {
+        MyOutpassesFragment.OnFragmentInteractionListener,
+        VerificationFragment.OnFragmentInteractionListener{
     private FirebaseAuth mAuth;
     FragmentManager fragmentManager;
     FirebaseUser curUser;
@@ -34,8 +35,16 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
         mAuth = FirebaseAuth.getInstance();
         curUser = mAuth.getCurrentUser();
         if(curUser!=null) {
-            startActivity(new Intent(SplashScreen.this, MainActivity.class));
-            finish();
+            if(curUser.isEmailVerified()) {
+                startActivity(new Intent(SplashScreen.this, MainActivity.class));
+                finish();
+            }
+            else{
+                tvLabel.setVisibility(View.GONE);
+                final FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.SSConstraintLayout, VerificationFragment.newInstance()).commit();
+
+            }
         }
         else {
             final LoginStudentFragment loginStudentFragment = LoginStudentFragment.newInstance();
