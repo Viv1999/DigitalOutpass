@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -188,8 +189,12 @@ public class MyOutpassesFragment extends Fragment {
             Outpass curOutpass = outpasses.get(i);
             v.tvFrom.setText(curOutpass.getFrom());
             v.tvTo.setText(curOutpass.getTo());
-            v.tvLeaveDate.setText(curOutpass.getLeaveDate().getTime()+"");
-            v.tvReturnDate.setText(curOutpass.getReturnDate().getTime()+"");
+            Calendar leaveCal = Calendar.getInstance();
+            leaveCal.setTime(curOutpass.getLeaveDate());
+            Calendar returnCal = Calendar.getInstance();
+            returnCal.setTime(curOutpass.getReturnDate());
+            v.tvLeaveDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
+            v.tvReturnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
 
         }
 
