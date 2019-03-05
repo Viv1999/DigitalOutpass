@@ -10,6 +10,8 @@ public class Outpass {
     String from;
     Date leaveDate;
     Date returnDate;
+    boolean isVerified = false;
+    String hostel;
 
 
     public Outpass() {
@@ -17,13 +19,14 @@ public class Outpass {
 
     }
 
-    public Outpass(String personName, String to, String from, Date leaveDate, Date returnDate) {
+    public Outpass(String personName, String to, String from, Date leaveDate, Date returnDate, String hostel) {
         this.id = curId++;
         this.personName = personName;
         this.to = to;
         this.from = from;
         this.leaveDate = leaveDate;
         this.returnDate = returnDate;
+        this.hostel = hostel;
     }
 
     public void setPersonName(String personName) {
@@ -69,5 +72,13 @@ public class Outpass {
 
     public Date getReturnDate() {
         return returnDate;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public String getHostel() {
+        return hostel;
     }
 }

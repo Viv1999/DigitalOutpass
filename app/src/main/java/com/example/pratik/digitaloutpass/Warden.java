@@ -17,4 +17,8 @@ public class Warden extends User {
     public void setHostel(String hostel) {
         this.hostel = hostel;
     }
+   
+    public Warden() {
+        this.role = WARDEN;
+    }
 }

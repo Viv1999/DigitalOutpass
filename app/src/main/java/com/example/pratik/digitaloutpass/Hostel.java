@@ -1,9 +1,12 @@
 package com.example.pratik.digitaloutpass;
 
+
 import java.util.ArrayList;
 
 public class Hostel {
-
+    public static final String RAMAN_HOUSE = "Raman House";
+    public static final String BHABHA_HOUSE = "Bhabha House";
+    public static final String BOSE_HOUSE = "Bose House";
 
     static ArrayList<String> ramanHouseList = new ArrayList<String>();
     static ArrayList<String> bhabhaHouseList = new ArrayList<String>();
@@ -41,4 +44,5 @@ public class Hostel {
     public static void setBoseHouseList(ArrayList<String> boseHouseList) {
         Hostel.boseHouseList = boseHouseList;
     }
+
 }
