@@ -13,6 +13,7 @@ public class Outpass {
     boolean isVerified = false;
     String hostel;
 
+
     public Outpass() {
 
 
