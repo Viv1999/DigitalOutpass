@@ -195,6 +195,8 @@ public class MyOutpassesFragment extends Fragment {
             returnCal.setTime(curOutpass.getReturnDate());
             v.tvLeaveDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
             v.tvReturnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
+            v.tvCardId.setText("Outpass id: "+ curOutpass.getId());
+
 
         }
 
@@ -212,12 +214,16 @@ public class MyOutpassesFragment extends Fragment {
             TextView tvFrom;
             TextView tvLeaveDate;
             TextView tvReturnDate;
+            TextView tvCardId;
+
             public OutpassesVHolder(@NonNull View itemView) {
                 super(itemView);
                 tvFrom = itemView.findViewById(R.id.tvFromCardOutpass);
                 tvTo = itemView.findViewById(R.id.tvToCardOutpass);
                 tvLeaveDate = itemView.findViewById(R.id.tvLeaveDateCardOutpass);
                 tvReturnDate = itemView.findViewById(R.id.tvRetDateCardOutpass);
+                tvCardId = itemView.findViewById(R.id.cardId);
+
             }
         }
 

@@ -126,7 +126,7 @@ public class PendingOutpasses extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull OutpassesRViewAdapter.OutpassesVHolder v, int i) {
+        public void onBindViewHolder(@NonNull final OutpassesRViewAdapter.OutpassesVHolder v, int i) {
             Outpass curOutpass = outpasses.get(i);
             v.tvFrom.setText(curOutpass.getFrom());
             v.tvTo.setText(curOutpass.getTo());
@@ -136,7 +136,19 @@ public class PendingOutpasses extends Fragment {
             returnCal.setTime(curOutpass.getReturnDate());
             v.tvLeaveDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
             v.tvReturnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
+            v.tvCardId.setText("Outpass id: "+ curOutpass.getId());
+            DatabaseReference personName = FirebaseDatabase.getInstance().getReference("users").child(curOutpass.getPersonName()).child("name");
+            personName.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    v.tvStudentName.setText("Student name: "+ dataSnapshot.getValue(String.class));
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
         }
 
@@ -155,6 +167,7 @@ public class PendingOutpasses extends Fragment {
             TextView tvLeaveDate;
             TextView tvReturnDate;
             TextView tvStudentName;
+            TextView tvCardId;
             public OutpassesVHolder(@NonNull View itemView) {
                 super(itemView);
                 tvFrom = itemView.findViewById(R.id.tvFromCardOutpass);
@@ -162,6 +175,7 @@ public class PendingOutpasses extends Fragment {
                 tvLeaveDate = itemView.findViewById(R.id.tvLeaveDateCardOutpass);
                 tvReturnDate = itemView.findViewById(R.id.tvRetDateCardOutpass);
                 tvStudentName = itemView.findViewById(R.id.tvStudentName);
+                tvCardId = itemView.findViewById(R.id.cardId);
             }
         }
 

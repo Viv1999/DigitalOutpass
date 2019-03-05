@@ -11,16 +11,15 @@
         android:id="@+id/tvLabel"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="118dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="204dp"
-        android:layout_marginEnd="135dp"
+        android:layout_marginEnd="8dp"
         android:text="Digital Outpass"
         android:textAlignment="center"
         android:textColor="#5E2B10"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
