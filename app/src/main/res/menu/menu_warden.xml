@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_settings"
+<item
+        android:id="@+id/action_settings_warden"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        android:icon="@drawable/settings_gear"
+    android:icon="@drawable/settings_gear"
         app:showAsAction="never" />
     <item
-        android:id="@+id/logout"
+        android:id="@+id/logout_warden"
         android:title="@string/logout"
         app:showAsAction="ifRoom"
         android:icon="@drawable/logout"/>
+
 </menu>
