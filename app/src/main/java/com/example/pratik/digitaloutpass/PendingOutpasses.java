@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -135,6 +137,7 @@ public class PendingOutpasses extends Fragment {
             v.tvLeaveDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
             v.tvReturnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
 
+
         }
 
         @Override
@@ -151,12 +154,14 @@ public class PendingOutpasses extends Fragment {
             TextView tvFrom;
             TextView tvLeaveDate;
             TextView tvReturnDate;
+            TextView tvStudentName;
             public OutpassesVHolder(@NonNull View itemView) {
                 super(itemView);
                 tvFrom = itemView.findViewById(R.id.tvFromCardOutpass);
                 tvTo = itemView.findViewById(R.id.tvToCardOutpass);
                 tvLeaveDate = itemView.findViewById(R.id.tvLeaveDateCardOutpass);
                 tvReturnDate = itemView.findViewById(R.id.tvRetDateCardOutpass);
+                tvStudentName = itemView.findViewById(R.id.tvStudentName);
             }
         }
 
