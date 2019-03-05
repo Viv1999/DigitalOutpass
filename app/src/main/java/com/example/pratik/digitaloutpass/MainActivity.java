@@ -144,6 +144,33 @@ public class MainActivity extends AppCompatActivity
             MyOutpassesFragment outpassesFragment = MyOutpassesFragment.newInstance();
             fragmentManager.beginTransaction().replace(R.id.content_main_relative, outpassesFragment).commit();
         }
+
+        //setContentView(R.layout.nav_header_main);
+
+
+
+
+
+
+        NavigationView navigationView1 = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        final TextView tvName = (TextView)headerView.findViewById(R.id.tvName);
+        final TextView tvEmail = (TextView)headerView.findViewById(R.id.tvEmail);
+        curUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                tvName.setText(dataSnapshot.child("name").getValue(String.class));
+                tvEmail.setText(dataSnapshot.child("email").getValue(String.class));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         //LoginStudentFragment fragment = LoginStudentFragment.newInstance();
     }
 
@@ -194,16 +221,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_all_outpasses) {
             MyOutpassesFragment outpassesFragment = MyOutpassesFragment.newInstance();
             fragmentManager.beginTransaction().replace(R.id.content_main_relative, outpassesFragment).commit();
-
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 
