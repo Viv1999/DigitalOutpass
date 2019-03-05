@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_login_student"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#8BC34A"
-    android:orientation="horizontal"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".LoginStudentFragment">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:fontFamily="sans-serif-black"
+        android:text="Digital Outpass"
+        android:textSize="30sp" />
 
     <EditText
         android:id="@+id/etEmailLoginStudent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="71dp"
-        android:layout_marginEnd="100dp"
+
         android:drawableStart="@drawable/email"
         android:drawablePadding="5dp"
         android:ems="10"
@@ -27,29 +34,14 @@
         android:id="@+id/etPasswordLoginStudent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="316dp"
-        android:layout_marginEnd="102dp"
+
         android:drawableStart="@drawable/password_lock"
         android:drawablePadding="5dp"
         android:ems="10"
         android:hint="Enter password"
         android:inputType="textPassword" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="97dp"
-        android:layout_marginTop="122dp"
-        android:layout_marginEnd="106dp"
-        android:fontFamily="sans-serif-black"
-        android:text="Digital Outpass"
-        android:textSize="30sp" />
+
 
     <Button
         android:id="@+id/bLogin"
@@ -57,21 +49,21 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPasswordLoginStudent"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="152dp"
-        android:layout_marginTop="59dp"
-        android:layout_marginBottom="192dp"
-        android:text="Login" />
+
+        android:text="Login as Student" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bloginAsWarden"
+
+        android:text = "Login as Warden"/>
 
     <TextView
         android:id="@+id/tvGoToSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="106dp"
-        android:layout_marginEnd="111dp"
-        android:layout_marginBottom="131dp"
+
         android:text="New User? Signup"
         android:textSize="24sp" />
-</RelativeLayout>
+</LinearLayout>

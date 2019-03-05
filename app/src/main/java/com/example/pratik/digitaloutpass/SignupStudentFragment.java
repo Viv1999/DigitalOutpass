@@ -62,6 +62,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
     private List<String> years;
     private List<String> branches;
     private List<String> hostels;
+    private DatabaseReference mref;
 
     private OnFragmentInteractionListener mListener;
 
@@ -90,6 +91,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         userDatabase = FirebaseDatabase.getInstance().getReference("users");
+        mref = FirebaseDatabase.getInstance().getReference();
         //users = database.getReference('')
 
 
@@ -240,6 +242,18 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
                     if(task.isSuccessful()){
                         Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
                         String newUserKey = mAuth.getCurrentUser().getUid();
+                        if(hostel.equals("Bhabha House")) {
+                            Hostel.bhabhaHouseList.add(mAuth.getCurrentUser().getUid());
+                            mref.child("hostels").child("Bhabha House").setValue(Hostel.bhabhaHouseList);
+                        }
+                        else if(hostel.equals("Raman House")){
+                            Hostel.ramanHouseList.add(mAuth.getCurrentUser().getUid());
+                            mref.child("hostels").child("Raman House").setValue(Hostel.ramanHouseList);
+                        }
+                        else{
+                            Hostel.boseHouseList.add(mAuth.getCurrentUser().getUid());
+                            mref.child("hostels").child("Bose House").setValue(Hostel.boseHouseList);
+                        }
                         User newUser = new User(newUserKey, email.substring(0, email.indexOf('@')), User.STUDENT, email, phone);
                         newUser = new Student(newUserKey, name, User.STUDENT, email, phone, enroll, batch, branch, hostel);
                         userDatabase.child(newUserKey).setValue(newUser);

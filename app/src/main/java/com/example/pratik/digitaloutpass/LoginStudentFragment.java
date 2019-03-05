@@ -23,6 +23,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 /**
@@ -40,6 +46,10 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
     EditText etPassword;
     Button bLogin;
     TextView tvGotToSignup;
+    Button bLoginAsWar;
+    DatabaseReference userDatabase;
+    String getRole;
+    boolean flag;
     public LoginStudentFragment() {
         // Required empty public constructor
     }
@@ -65,9 +75,12 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
         etEmail = v.findViewById(R.id.etEmailLoginStudent);
         etPassword = v.findViewById(R.id.etPasswordLoginStudent);
         bLogin = v.findViewById(R.id.bLogin);
+        bLoginAsWar = v.findViewById(R.id.bloginAsWarden);
+        bLoginAsWar.setOnClickListener(this);
         bLogin.setOnClickListener(this);
         tvGotToSignup = v.findViewById(R.id.tvGoToSignup);
         tvGotToSignup.setOnClickListener(this);
+
         return  v;
     }
 
@@ -97,13 +110,15 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.bLogin:
                 clickOnLogin();
                 break;
             case R.id.tvGoToSignup:
                 gotToSignup();
                 break;
+            case R.id.bloginAsWarden:
+                loginAsWarden();
         }
     }
 
@@ -137,15 +152,55 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
+                    if(task.isSuccessful()) {
                         Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
 
-                        //startActivity(new Intent(getContext(), MainActivity.class));
-                        VerificationFragment verificationFragment = new VerificationFragment();
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.SSConstraintLayout, verificationFragment, "findThisFragment")
-                                .addToBackStack(null)
-                                .commit();
+                        userDatabase = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid());
+                        final FirebaseUser user = mAuth.getCurrentUser();
+                        final String Uid = mAuth.getCurrentUser().getUid();
+
+
+
+                        userDatabase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Toast.makeText(getActivity(),"Inside",Toast.LENGTH_SHORT).show();
+                                getRole = dataSnapshot.child("role").getValue(String.class);
+                                if(!getRole.equals("STUDENT")){
+
+                                    mAuth.signOut();
+                                    Toast.makeText(getContext(), "Not a Student", Toast.LENGTH_SHORT).show();
+                                }
+
+
+
+                                else {
+
+                                    if (!(user.isEmailVerified())) {
+
+                                        //startActivity(new Intent(getContext(), MainActivity.class));
+                                        VerificationFragment verificationFragment = new VerificationFragment();
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.SSConstraintLayout, verificationFragment, "findThisFragment")
+                                                .addToBackStack(null)
+                                                .commit();
+                                    } else {
+                                        startActivity(new Intent(getContext(), MainActivity.class));
+                                    }
+                                }
+                            }
+
+
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+
+                        Toast.makeText(getContext(),getRole,Toast.LENGTH_SHORT).show();
 
                     }
                     else{
@@ -156,6 +211,83 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
         }
 
 
+    }
+
+    public void loginAsWarden(){
+        String email = etEmail.getText().toString().trim();
+        String password = etPassword.getText().toString();
+
+        if(email==null || email.length()==0){
+            etEmail.setError("Enter an email");
+            etEmail.requestFocus();
+        }
+        else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            etEmail.setError("Enter a valid email address");
+            etEmail.requestFocus();
+        }
+        else if(password==""){
+            etPassword.setError("Please enter a password");
+            etPassword.requestFocus();
+        }
+        else if (password.length()<6){
+            etPassword.setError("Password length should be greater than 6");
+            etPassword.requestFocus();
+        }
+        else{
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()) {
+                        Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
+
+                        final FirebaseUser user = mAuth.getCurrentUser();
+
+                        String Uid = mAuth.getCurrentUser().getUid();
+
+                        userDatabase = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid());
+
+                        userDatabase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                getRole = dataSnapshot.child("role").getValue(String.class);
+                                if (!getRole.equals("WARDEN")) {
+                                    mAuth.signOut();
+                                    Toast.makeText(getContext(), "Not a Warden", Toast.LENGTH_SHORT).show();
+
+                                }
+
+
+
+                                else {
+                                    if (!(user.isEmailVerified())) {
+                                        //startActivity(new Intent(getContext(), MainActivity.class));
+                                        VerificationFragment verificationFragment = new VerificationFragment();
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.SSConstraintLayout, verificationFragment, "findThisFragment")
+                                                .addToBackStack(null)
+                                                .commit();
+                                    } else {
+                                        //startActivity(new Intent(getContext(), WardenActivity.class));
+                                    }
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                    else{
+                        Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     /**
