@@ -184,7 +184,12 @@ public class MyOutpassesFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull OutpassesVHolder outpassesVHolder, int i) {
+        public void onBindViewHolder(@NonNull OutpassesVHolder v, int i) {
+            Outpass curOutpass = outpasses.get(i);
+            v.tvFrom.setText(curOutpass.getFrom());
+            v.tvTo.setText(curOutpass.getTo());
+            v.tvLeaveDate.setText(curOutpass.getLeaveDate().getTime()+"");
+            v.tvReturnDate.setText(curOutpass.getReturnDate().getTime()+"");
 
         }
 

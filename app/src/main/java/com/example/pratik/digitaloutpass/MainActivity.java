@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity
     SharedPreferences sharedPreferences;
     DatabaseReference myOutpassesRef;
     ArrayList<String> myOutpasses;
+    private String hostel;
+    DatabaseReference curUserRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,20 @@ public class MainActivity extends AppCompatActivity
         myOutpasses = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         curUser = mAuth.getCurrentUser();
+        curUserRef = usersRef.child(curUser.getUid());
         myOutpassesRef = usersRef.child(curUser.getUid()).child("myOutpasses");
+
+        curUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                hostel = dataSnapshot.getValue(Student.class).getHostel();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         myOutpassesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -226,6 +241,7 @@ public class MainActivity extends AppCompatActivity
         switch(v.getId()){
             case R.id.fab:
                 createNewOutpass();
+//                startActivity(new Intent(MainActivity.this, WardenActivity.class));
                 break;
         }
     }
@@ -264,7 +280,7 @@ public class MainActivity extends AppCompatActivity
                 String from  = etFrom.getText().toString().trim();
                 Date leaveDate = leaveDateCal.getTime();
                 Date returnDate = returnDateCal.getTime();
-                Outpass outpass = new Outpass(curUser.getUid(), to, from, leaveDate, returnDate);
+                Outpass outpass = new Outpass(curUser.getUid(), to, from, leaveDate, returnDate, hostel);
                 myOutpasses.add(outpass.getId()+"");
                 myOutpassesRef.setValue(myOutpasses);
                 outpassesRef.child(outpass.getId()+"").setValue(outpass);
