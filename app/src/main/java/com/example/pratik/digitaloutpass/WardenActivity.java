@@ -27,16 +27,15 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_warden);
         mAuth = FirebaseAuth.getInstance();
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        //toolbar.setVisibility(View.GONE);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         mDrawerLayout = findViewById(R.id.activity_warden_drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
-        navigationView.setNavigationItemSelectedListener(this);
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
+//        navigationView.setNavigationItemSelectedListener(this);
 
         PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.warden_activity_container, pendingOutpasses).commit();
