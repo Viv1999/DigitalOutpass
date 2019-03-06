@@ -6,14 +6,15 @@ public class myStudent {
     private int enroll;
     private String branch;
     private long phone;
-    private int profPic;
+    //private int profPic;
 
-    public myStudent(String name, int enroll, String branch, long phone, int profPic) {
+    public myStudent(String name, int enroll, String branch, long phone//, int profPic
+                      ) {
         this.name = name;
         this.enroll = enroll;
         this.branch = branch;
         this.phone = phone;
-        this.profPic = profPic;
+        //this.profPic = profPic;
     }
 
     public myStudent() {
@@ -51,11 +52,11 @@ public class myStudent {
         this.phone = phone;
     }
 
-    public int getProfPic() {
-        return profPic;
-    }
-
-    public void setProfPic(int profPic) {
-        this.profPic = profPic;
-    }
+//    public int getProfPic() {
+//        return profPic;
+//    }
+//
+//    public void setProfPic(int profPic) {
+//        this.profPic = profPic;
+//    }
 }

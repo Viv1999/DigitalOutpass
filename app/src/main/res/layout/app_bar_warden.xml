@@ -20,13 +20,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/warden_activity_container"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+    <include layout="@layout/content_warden" />
 
-    </LinearLayout>
+
 
 </LinearLayout>

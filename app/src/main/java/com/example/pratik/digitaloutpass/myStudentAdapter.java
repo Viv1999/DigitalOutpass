@@ -38,10 +38,10 @@ public class myStudentAdapter extends RecyclerView.Adapter<myStudentAdapter.mySt
 
         myStudentViewHolder.nameS.setText(mystudent.getName());
         myStudentViewHolder.branch.setText(mystudent.getBranch());
-        myStudentViewHolder.enroll.setText(mystudent.getEnroll());
+        myStudentViewHolder.enroll.setText(mystudent.getEnroll()+"");
         myStudentViewHolder.phone.setText(mystudent.getPhone()+"");
 
-        myStudentViewHolder.profPic.setImageDrawable(mctx.getResources().getDrawable(mystudent.getProfPic(),null));
+        //myStudentViewHolder.profPic.setImageDrawable(mctx.getResources().getDrawable(mystudent.getProfPic(),null));
 
     }
 

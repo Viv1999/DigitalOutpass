@@ -37,11 +37,11 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
-//        navigationView.setNavigationItemSelectedListener(this);
+      NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
+        navigationView.setNavigationItemSelectedListener(this);
 
         PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.warden_activity_container, pendingOutpasses).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, pendingOutpasses).commit();
 
 
     }
@@ -58,15 +58,15 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         switch (menuItem.getItemId()){
             case R.id.pendingOutpassesItem:
                 PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.warden_activity_container, pendingOutpasses).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, pendingOutpasses).commit();
                 break;
             case R.id.myStudentsItem:
 
-                MyStrudentsFragment myStrudentsFragment = new MyStrudentsFragment();
+                MyStrudentsFragment myStrudentsFragment = MyStrudentsFragment.newInstance();
 
-                this.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.warden_activity_container, myStrudentsFragment, "findThisFragment")
-                        .addToBackStack(null)
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_warden_relative, myStrudentsFragment)
+
                         .commit();
                 //load fragment here
                 break;

@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class MyStrudentsFragment extends Fragment {
 
-    private MyStrudentsFragment.OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener;
 
     RecyclerView recyclerView;
     myStudentAdapter mystudentAdapter;
@@ -84,23 +84,41 @@ public class MyStrudentsFragment extends Fragment {
 
         final FirebaseUser user = mAuth.getCurrentUser();
 
-        Query query = userDatabase.orderByChild("hostel").equalTo("Bhabha House");
-        Query query1 = query.orderByChild("role").equalTo("STUDENT");
-
-        query1.addValueEventListener(new ValueEventListener() {
+        userDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                hostel = dataSnapshot.child(user.getUid()).child("hostel").getValue(String.class);
+                Query query = userDatabase.orderByChild("hostel").equalTo(hostel);
+                //Query query1 = query.orderByChild("role").equalTo("STUDENT");
 
-                    Student student = dataSnapshot1.getValue(Student.class);
-                    myStudent mystudent = new myStudent(student.name,student.enrollNo,student.branch,student.phoneNo,0);
-                    myStudentList.add(mystudent);
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    mystudentAdapter = new myStudentAdapter(getActivity(),myStudentList);
-                    recyclerView.setAdapter(mystudentAdapter);
+                        for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
 
-                }
+
+
+                            Student student = dataSnapshot1.getValue(Student.class);
+                            if(student.getId().equals(user.getUid())){
+                                continue;
+                            }
+                            myStudent mystudent = new myStudent(student.getName(),student.enrollNo,student.branch,student.phoneNo);
+                            myStudentList.add(mystudent);
+
+                            mystudentAdapter = new myStudentAdapter(getActivity(),myStudentList);
+                            recyclerView.setAdapter(mystudentAdapter);
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
             }
 
@@ -109,6 +127,10 @@ public class MyStrudentsFragment extends Fragment {
 
             }
         });
+
+
+
+
 
 
 //        wardenref.addValueEventListener(new ValueEventListener() {
