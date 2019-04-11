@@ -5,8 +5,8 @@ public class Warden extends User {
     private String hostel;
 
 
-    public Warden(String id, String name, String role, String email, long phoneNo, String hostel) {
-        super(id, name, role, email, phoneNo);
+    public Warden(String id, String name, String role, String email, long phoneNo, String hostel, String uri) {
+        super(id, name, role, email, phoneNo, uri);
         this.hostel = hostel;
     }
 

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
         LoginStudentFragment.OnFragmentInteractionListener,
         SignupStudentFragment.OnFragmentInteractionListener,
         MyOutpassesFragment.OnFragmentInteractionListener,
+        EditProfileFragment.OnFragmentInteractionListener,
         View.OnClickListener{
     public static final String CUR_OUTPASS_ID_KEY = "CUR_OUTPASS_ID";
     private FirebaseAuth mAuth;
@@ -222,6 +223,13 @@ public class MainActivity extends AppCompatActivity
             MyOutpassesFragment outpassesFragment = MyOutpassesFragment.newInstance();
             fragmentManager.beginTransaction().replace(R.id.content_main_relative, outpassesFragment).commit();
 
+        }
+
+        else if(id == R.id.nav_edit_stu){
+
+            EditProfileFragment editProfileFragment = EditProfileFragment.newInstance();
+            fragmentManager.beginTransaction().replace(R.id.content_main_relative,editProfileFragment).commit();
+            //open edit profile fragment here
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

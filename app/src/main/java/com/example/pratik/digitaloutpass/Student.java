@@ -16,8 +16,8 @@ public class Student extends User{
         this.regId = curRegId++;
     }
 
-    public Student(String id, String name, String role, String email, long phoneNo, int enrollNo, String batch, String branch, String hostel) {
-        super(id, name, role, email, phoneNo);
+    public Student(String id, String name, String role, String email, long phoneNo, int enrollNo, String batch, String branch, String hostel, String uri) {
+        super(id, name, role, email, phoneNo,uri);
         this.regId = curRegId++;
         this.enrollNo = enrollNo;
         this.batch = batch;
