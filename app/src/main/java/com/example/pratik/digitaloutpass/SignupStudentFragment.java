@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -89,6 +90,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(getContext());
         mAuth = FirebaseAuth.getInstance();
         userDatabase = FirebaseDatabase.getInstance().getReference("users");
         mref = FirebaseDatabase.getInstance().getReference();
@@ -254,8 +256,8 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
                             Hostel.boseHouseList.add(mAuth.getCurrentUser().getUid());
                             mref.child("hostels").child("Bose House").setValue(Hostel.boseHouseList);
                         }
-                        User newUser = new User(newUserKey, email.substring(0, email.indexOf('@')), User.STUDENT, email, phone);
-                        newUser = new Student(newUserKey, name, User.STUDENT, email, phone, enroll, batch, branch, hostel);
+                        User newUser = new User(newUserKey, email.substring(0, email.indexOf('@')), User.STUDENT, email, phone, null);
+                        newUser = new Student(newUserKey, name, User.STUDENT, email, phone, enroll, batch, branch, hostel,null);
                         userDatabase.child(newUserKey).setValue(newUser);
                         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override

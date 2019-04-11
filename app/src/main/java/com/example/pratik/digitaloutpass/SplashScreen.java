@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +36,7 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        FirebaseApp.initializeApp(this);
         Intent intent = getIntent();
         int classId = intent.getIntExtra("CLASS_NAME", -1);
 

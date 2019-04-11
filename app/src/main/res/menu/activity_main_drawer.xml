@@ -9,6 +9,11 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="My outpasses" />
 
+        <item
+            android:id="@+id/nav_edit_stu"
+            android:icon="@drawable/ic_edit_profile"
+            android:title="Edit Profile"/>
+
     </group>
 
 

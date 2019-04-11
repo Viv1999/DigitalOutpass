@@ -11,16 +11,26 @@ public class User {
     String email;
     long phoneNo;
     boolean isEmailVerified = false;
+    String uri;
 
-    public User(String id, String name, String role, String email, long phoneNo) {
+    public User(String id, String name, String role, String email, long phoneNo, String uri) {
         this.id = id;
         this.name = name;
         this.role = role;
         this.email = email;
         this.phoneNo = phoneNo;
+        this.uri = uri;
     }
 
     public User() {
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public static String getSTUDENT() {
