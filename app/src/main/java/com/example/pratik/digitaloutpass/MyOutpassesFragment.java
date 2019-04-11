@@ -195,7 +195,7 @@ public class MyOutpassesFragment extends Fragment {
             returnCal.setTime(curOutpass.getReturnDate());
             v.tvLeaveDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
             v.tvReturnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
-            v.tvCardId.setText("Outpass id: "+ curOutpass.getId());
+            v.tvCardId.setText("Outpass ID:  "+ curOutpass.getId());
 
 
         }

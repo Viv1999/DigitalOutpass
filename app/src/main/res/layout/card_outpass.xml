@@ -15,25 +15,27 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/cardId"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:id="@+id/cardId"/>
+            app:fontFamily="sans-serif-black"
+            android:gravity="center" />
 
-    <RelativeLayout
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-        <TextView
-            android:id="@+id/tvFromLabelCardOutpass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="75dp"
-            android:layout_marginTop="10dp"
-            android:text="From" />
+            <TextView
+                android:id="@+id/tvFromLabelCardOutpass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="10dp"
+                android:text="From"
+                app:fontFamily="sans-serif-black" />
 
         <TextView
             android:id="@+id/tvToLabelCardOutpass"
@@ -41,9 +43,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="86dp"
+            android:layout_marginStart="64dp"
             android:layout_marginTop="61dp"
-            android:text="To" />
+            android:text="To"
+            app:fontFamily="sans-serif-black"/>
 
         <TextView
             android:id="@+id/tvFromCardOutpass"
@@ -51,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="253dp"
+            android:layout_marginStart="232dp"
             android:layout_marginTop="15dp" />
 
         <TextView
@@ -60,8 +63,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="262dp"
-            android:layout_marginTop="61dp" />
+            android:layout_marginStart="232dp"
+            android:layout_marginTop="61dp"
+            />
 
         <TextView
             android:id="@+id/tvLeaveDateLabelCardOutpass"
@@ -71,7 +75,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="64dp"
             android:layout_marginTop="105dp"
-            android:text="Leave date" />
+            android:text="Leave date"
+            app:fontFamily="sans-serif-black"/>
 
         <TextView
             android:id="@+id/tvRetDateLabelCardOutpass"
@@ -81,7 +86,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="65dp"
             android:layout_marginTop="144dp"
-            android:text="Return Date" />
+            android:text="Return Date"
+            app:fontFamily="sans-serif-black"/>
 
         <TextView
             android:id="@+id/tvLeaveDateCardOutpass"
@@ -91,7 +97,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="232dp"
             android:layout_marginTop="107dp"
-            android:text="Return Date" />
+            android:text="Return Date"
+            />
 
         <TextView
             android:id="@+id/tvRetDateCardOutpass"
