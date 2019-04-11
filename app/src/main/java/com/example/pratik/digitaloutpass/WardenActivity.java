@@ -2,6 +2,7 @@ package com.example.pratik.digitaloutpass;
 
 import android.content.Intent;
 import android.icu.util.Freezable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,10 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.pratik.digitaloutpass.dummy.DummyContent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,MyStrudentsFragment.OnFragmentInteractionListener
+        {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     FirebaseAuth mAuth;
@@ -34,11 +37,11 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
-//        navigationView.setNavigationItemSelectedListener(this);
+      NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
+        navigationView.setNavigationItemSelectedListener(this);
 
         PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.warden_activity_container, pendingOutpasses).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, pendingOutpasses).commit();
 
 
     }
@@ -55,7 +58,17 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         switch (menuItem.getItemId()){
             case R.id.pendingOutpassesItem:
                 PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.warden_activity_container, pendingOutpasses).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, pendingOutpasses).commit();
+                break;
+            case R.id.myStudentsItem:
+
+                MyStrudentsFragment myStrudentsFragment = MyStrudentsFragment.newInstance();
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_warden_relative, myStrudentsFragment)
+
+                        .commit();
+                //load fragment here
                 break;
             case R.id.logout_warden_nav:
                 mAuth.signOut();
@@ -68,4 +81,10 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-}
+
+
+            @Override
+            public void onFragmentInteraction(Uri uri) {
+
+            }
+        }
