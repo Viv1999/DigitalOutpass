@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -213,8 +214,11 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
         final String email = etEmail.getText().toString().trim();
         final String password = etPassword.getText().toString();
         final String name = etName.getText().toString();
-        final int enroll = Integer.parseInt(etEnroll.getText().toString());
-        final long phone = Long.parseLong(etPhone.getText().toString());
+        final String enrollText = etEnroll.getText().toString();
+        final int enroll;
+
+        final String phoneText = (etPhone.getText().toString());
+        final long phone;
 
 
 
@@ -224,6 +228,14 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
         if(email==null || email.length()==0){
             etEmail.setError("Enter an email");
             etEmail.requestFocus();
+        }
+        else if(enrollText==null || enrollText.length()==0){
+            etEnroll.setError("Please enter enroll");
+            etEnroll.requestFocus();
+        }
+        else if(phoneText==null || phoneText.length()!=10){
+            etPhone.setError("Plese enter 10-dig phone number");
+            etPhone.requestFocus();
         }
         else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             etEmail.setError("Enter a valid email address");
@@ -238,11 +250,12 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
             etPassword.requestFocus();
         }
         else {
+            enroll = Integer.parseInt(enrollText);
+            phone = Long.parseLong(phoneText);
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
                         String newUserKey = mAuth.getCurrentUser().getUid();
                         if(hostel.equals("Bhabha House")) {
                             Hostel.bhabhaHouseList.add(mAuth.getCurrentUser().getUid());
@@ -256,10 +269,13 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
                             Hostel.boseHouseList.add(mAuth.getCurrentUser().getUid());
                             mref.child("hostels").child("Bose House").setValue(Hostel.boseHouseList);
                         }
-                        User newUser = new User(newUserKey, email.substring(0, email.indexOf('@')), User.STUDENT, email, phone, null);
-                        newUser = new Student(newUserKey, name, User.STUDENT, email, phone, enroll, batch, branch, hostel,null);
+//                        User newUser = new User(newUserKey, email.substring(0, email.indexOf('@')), User.STUDENT, email, phone, null);
+                        User newUser = new Student(newUserKey, name, User.CARETAKER, email, phone, enroll, batch, branch, hostel,null);
+//                        User newUser = new Caretaker(newUserKey, name, User.CARETAKER, email, phone, null, Hostel.BHABHA_HOUSE);
                         userDatabase.child(newUserKey).setValue(newUser);
-                        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+                        Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                        /*mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
@@ -272,7 +288,7 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
                                             .commit();
                                 }
                             }
-                        });
+                        });*/
                     }
                 }
             });

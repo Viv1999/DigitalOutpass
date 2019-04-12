@@ -56,6 +56,9 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
                         else if(role.equals(User.WARDEN)){
                             startActivity(new Intent(SplashScreen.this, WardenActivity.class));
                         }
+                        else{
+                            startActivity(new Intent(SplashScreen.this, CaretakerActivity.class));
+                        }
                         finish();
                     }
                     else{

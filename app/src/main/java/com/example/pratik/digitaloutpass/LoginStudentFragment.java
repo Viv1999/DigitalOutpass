@@ -186,11 +186,14 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
                                                 .commit();
                                     } else {
 
-                                        if (getRole.equals("STUDENT")) {
+                                        if (getRole.equals(User.STUDENT)) {
                                             startActivity(new Intent(getContext(), MainActivity.class));
 
-                                        }else{
+                                        }else if(getRole.equals(User.WARDEN)){
                                             startActivity(new Intent(getContext(), WardenActivity.class));
+                                        }
+                                        else{
+                                            startActivity(new Intent(getContext(), CaretakerActivity.class));
                                         }
                                     }
 
