@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class requestAdapter extends RecyclerView.Adapter<requestAdapter.requestViewHolder> {
 
@@ -32,11 +33,18 @@ public class requestAdapter extends RecyclerView.Adapter<requestAdapter.requestV
         Outpass currentItem = requests.get(i);
 
         requestViewHolder.name.setText(currentItem.getPersonName());
-        requestViewHolder.id.setText(currentItem.getHostel());
+        requestViewHolder.id.setText(currentItem.getId()+"");
         requestViewHolder.from.setText(currentItem.getFrom());
         requestViewHolder.to.setText(currentItem.getTo());
-        requestViewHolder.ReturnDate.setText(currentItem.getReturnDate().toString());
-        requestViewHolder.LeavingDate.setText(currentItem.getLeaveDate().toString());
+//        requestViewHolder.ReturnDate.setText(currentItem.getReturnDate().toString());
+//        requestViewHolder.LeavingDate.setText(currentItem.getLeaveDate().toString());
+        Calendar leaveCal = Calendar.getInstance();
+        leaveCal.setTime(currentItem.getLeaveDate());
+        Calendar returnCal = Calendar.getInstance();
+        returnCal.setTime(currentItem.getReturnDate());
+        requestViewHolder.leavingDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
+        requestViewHolder.returnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
+
     }
 
     @Override
@@ -46,7 +54,7 @@ public class requestAdapter extends RecyclerView.Adapter<requestAdapter.requestV
 
     public  class requestViewHolder extends RecyclerView.ViewHolder{
         ImageView image;
-        TextView name,id,from,to,ReturnDate,LeavingDate;
+        TextView name,id,from,to,returnDate,leavingDate;
 
 
         public requestViewHolder(@NonNull View itemView) {
@@ -56,8 +64,8 @@ public class requestAdapter extends RecyclerView.Adapter<requestAdapter.requestV
             id=itemView.findViewById(R.id.textViewOutpassId);
             from=itemView.findViewById(R.id.textViewFrom);
             to=itemView.findViewById(R.id.textViewTo);
-            ReturnDate=itemView.findViewById(R.id.textViewReturnDate);
-            LeavingDate =itemView.findViewById(R.id.textViewLeavingDate);
+            returnDate=itemView.findViewById(R.id.textViewReturnDate);
+            leavingDate =itemView.findViewById(R.id.textViewLeavingDate);
         }
     }
 }
