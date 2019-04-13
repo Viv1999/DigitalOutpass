@@ -15,12 +15,16 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class CaretakerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyStrudentsFragment.OnFragmentInteractionListener{
+public class CaretakerActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+        MyStrudentsFragment.OnFragmentInteractionListener,
+        OutpassRequestFragment.OnFragmentInteractionListener {
 
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,15 +34,17 @@ public class CaretakerActivity extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = findViewById(R.id.activity_caretaker_drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_caretaker);
         navigationView.setNavigationItemSelectedListener(this);
 
-        PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, pendingOutpasses).commit();
+        OutpassRequestFragment outpassRequestFragment = OutpassRequestFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, outpassRequestFragment).commit();
+//        PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, pendingOutpasses).commit();
     }
 
 
@@ -50,7 +56,7 @@ public class CaretakerActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.pendingOutpassesItem:
                 PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, pendingOutpasses).commit();
