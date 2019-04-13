@@ -13,7 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CaretakerActivity"></activity>
+
+        <activity android:name=".CaretakerActivity">
+
+        </activity>
         <activity android:name=".WardenActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
