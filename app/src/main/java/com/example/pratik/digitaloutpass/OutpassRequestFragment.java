@@ -14,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.server.converter.StringToIntConverter;
+import com.google.android.gms.common.util.ArrayUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -24,9 +27,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Set;
 
 
 public class OutpassRequestFragment extends Fragment {
@@ -42,7 +47,9 @@ public class OutpassRequestFragment extends Fragment {
 
     String hostelOfCaretaker;
 
-    ArrayList<Outpass> outpassRequests = new ArrayList<>();
+//    ArrayList<Outpass> outpassRequests = new ArrayList<>();
+    ArrayList<String> outpassIds = new ArrayList<String>();
+    HashMap<String, Outpass> outpassRequestsMap = new HashMap<>();
     OutpassRequestsAdapter requestsAdapter;
     public OutpassRequestFragment() {
 
@@ -56,7 +63,7 @@ public class OutpassRequestFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestsAdapter = new OutpassRequestsAdapter(getContext(), outpassRequests);
+        requestsAdapter = new OutpassRequestsAdapter(getContext(), outpassRequestsMap, outpassIds);
         curUser = mAuth.getCurrentUser();
         usersRef = database.child("users");
         hostelsRef = database.child("hostels");
@@ -82,9 +89,16 @@ public class OutpassRequestFragment extends Fragment {
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 Outpass curOutpass =(Outpass) dataSnapshot.getValue(Outpass.class);
                                                 if(!curOutpass.isVerified()){
-                                                    requestsAdapter.notifyDataSetChanged();
-                                                    outpassRequests.add(curOutpass);
                                                     curOutpass.setPersonName(studentName);
+//                                                    outpassRequests.add(curOutpass);
+                                                    outpassRequestsMap.put(dataSnapshot.getKey(), curOutpass);
+                                                    outpassIds.add(dataSnapshot.getKey());
+                                                    requestsAdapter.notifyDataSetChanged();
+                                                }
+                                                else if(outpassRequestsMap.get(dataSnapshot.getKey())!=null){
+                                                    outpassRequestsMap.remove(dataSnapshot.getKey());
+                                                    outpassIds.remove(dataSnapshot.getKey());
+                                                    requestsAdapter.notifyDataSetChanged();
                                                 }
                                             }
 
@@ -220,33 +234,35 @@ public class OutpassRequestFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public class OutpassRequestsAdapter extends RecyclerView.Adapter<OutpassRequestsAdapter.requestViewHolder> {
+    public class OutpassRequestsAdapter extends RecyclerView.Adapter<OutpassRequestsAdapter.RequestViewHolder> {
 
-        private ArrayList<Outpass> requests ;
+        private HashMap<String, Outpass> requests ;
+        private ArrayList<String> outpassIds;
         Context ctx;
-        public OutpassRequestsAdapter(Context ctx, ArrayList<Outpass> requests) {
+        public OutpassRequestsAdapter(Context ctx, HashMap<String, Outpass> requests, ArrayList<String> outpasseIds) {
             this.requests= requests ;
+            this.ctx = ctx;
+            this.outpassIds = outpasseIds;
         }
 
         @NonNull
         @Override
-        public requestViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        public RequestViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
             LayoutInflater inflater= LayoutInflater.from(viewGroup.getContext());
             View view = inflater.inflate(R.layout.request_items, viewGroup,false);
-            return  new requestViewHolder(view);
+            return  new RequestViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull requestViewHolder requestViewHolder, int i) {
+        public void onBindViewHolder(@NonNull RequestViewHolder requestViewHolder, int i) {
 
-            final Outpass currentItem = requests.get(i);
-
+            final Outpass currentItem = requests.get(outpassIds.get(i));
             requestViewHolder.name.setText(currentItem.getPersonName());
             requestViewHolder.id.setText(currentItem.getId()+"");
             requestViewHolder.from.setText(currentItem.getFrom());
             requestViewHolder.to.setText(currentItem.getTo());
-    //        requestViewHolder.ReturnDate.setText(currentItem.getReturnDate().toString());
-    //        requestViewHolder.LeavingDate.setText(currentItem.getLeaveDate().toString());
+    //        RequestViewHolder.ReturnDate.setText(currentItem.getReturnDate().toString());
+    //        RequestViewHolder.LeavingDate.setText(currentItem.getLeaveDate().toString());
             Calendar leaveCal = Calendar.getInstance();
             leaveCal.setTime(currentItem.getLeaveDate());
             Calendar returnCal = Calendar.getInstance();
@@ -256,8 +272,9 @@ public class OutpassRequestFragment extends Fragment {
             requestViewHolder.bVerify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Toast.makeText(getContext(), "cliked", Toast.LENGTH_SHORT).show();
                     currentItem.setVerified(true);
-                    outpassesRef.child(""+currentItem.getId()).setValue(currentItem);
+                    outpassesRef.child(""+currentItem.getId()).child("verified").setValue(true);
                 }
             });
 
@@ -268,12 +285,12 @@ public class OutpassRequestFragment extends Fragment {
             return requests.size() ;
         }
 
-        public  class requestViewHolder extends RecyclerView.ViewHolder{
+        public  class RequestViewHolder extends RecyclerView.ViewHolder{
             ImageView image;
             TextView name,id,from,to,returnDate,leavingDate;
             Button bVerify, bDeny;
 
-            public requestViewHolder(@NonNull View itemView) {
+            public RequestViewHolder(@NonNull View itemView) {
                 super(itemView);
                 image= itemView.findViewById(R.id.StudentImage);
                 name=itemView.findViewById(R.id.textViewName);
