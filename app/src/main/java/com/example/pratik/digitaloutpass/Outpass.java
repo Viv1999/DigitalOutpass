@@ -19,6 +19,10 @@ public class Outpass {
 
     }
 
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
     public Outpass(String personName, String to, String from, Date leaveDate, Date returnDate, String hostel) {
         this.id = curId++;
         this.personName = personName;

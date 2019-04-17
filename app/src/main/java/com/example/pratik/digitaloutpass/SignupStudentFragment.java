@@ -27,9 +27,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -256,26 +261,42 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        String newUserKey = mAuth.getCurrentUser().getUid();
-                        if(hostel.equals("Bhabha House")) {
-                            Hostel.bhabhaHouseList.add(mAuth.getCurrentUser().getUid());
-                            mref.child("hostels").child("Bhabha House").setValue(Hostel.bhabhaHouseList);
-                        }
-                        else if(hostel.equals("Raman House")){
-                            Hostel.ramanHouseList.add(mAuth.getCurrentUser().getUid());
-                            mref.child("hostels").child("Raman House").setValue(Hostel.ramanHouseList);
-                        }
-                        else{
-                            Hostel.boseHouseList.add(mAuth.getCurrentUser().getUid());
-                            mref.child("hostels").child("Bose House").setValue(Hostel.boseHouseList);
-                        }
+                        final String newUserKey = mAuth.getCurrentUser().getUid();
+                        mref.child("hostels").child(hostel).child("members").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
+                                ArrayList<String> members = dataSnapshot.getValue(t);
+                                if(members==null){
+                                    members = new ArrayList<String>();
+                                }
+                                members.add(newUserKey);
+                                mref.child("hostels").child(hostel).child("members").setValue(members);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+//                        if(hostel.equals("Bhabha House")) {
+//                            Hostel.bhabhaHouseList.add(mAuth.getCurrentUser().getUid());
+//                            mref.child("hostels").child("Bhabha House").setValue(Hostel.bhabhaHouseList);
+//                        }
+//                        else if(hostel.equals("Raman House")){
+//                            Hostel.ramanHouseList.add(mAuth.getCurrentUser().getUid());
+//                            mref.child("hostels").child("Raman House").setValue(Hostel.ramanHouseList);
+//                        }
+//                        else{
+//                            Hostel.boseHouseList.add(mAuth.getCurrentUser().getUid());
+//                            mref.child("hostels").child("Bose House").setValue(Hostel.boseHouseList);
+//                        }
 //                        User newUser = new User(newUserKey, email.substring(0, email.indexOf('@')), User.STUDENT, email, phone, null);
-                        User newUser = new Student(newUserKey, name, User.CARETAKER, email, phone, enroll, batch, branch, hostel,null);
-//                        User newUser = new Caretaker(newUserKey, name, User.CARETAKER, email, phone, null, Hostel.BHABHA_HOUSE);
+                        User newUser = new Student(newUserKey, name, User.STUDENT, email, phone, enroll, batch, branch, hostel,null);
                         userDatabase.child(newUserKey).setValue(newUser);
 
                         Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
-                        /*mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                       mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
@@ -288,7 +309,9 @@ public class SignupStudentFragment extends Fragment implements View.OnClickListe
                                             .commit();
                                 }
                             }
-                        });*/
+                        });
+                    }else{
+                        Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });

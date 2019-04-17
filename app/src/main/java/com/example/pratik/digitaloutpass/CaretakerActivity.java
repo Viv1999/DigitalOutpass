@@ -15,10 +15,13 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import static com.example.pratik.digitaloutpass.SplashScreen.CLASS_NAME;
+
 public class CaretakerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        MyStrudentsFragment.OnFragmentInteractionListener,
-        OutpassRequestFragment.OnFragmentInteractionListener {
+        MyStudentsFragment.OnFragmentInteractionListener,
+        OutpassRequestFragment.OnFragmentInteractionListener,
+        AllOutpassesFragment.OnFragmentInteractionListener {
 
 
     private DrawerLayout mDrawerLayout;
@@ -58,12 +61,12 @@ public class CaretakerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.pendingOutpassesItem:
-                PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, pendingOutpasses).commit();
+                OutpassRequestFragment outpassRequestFragment = OutpassRequestFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, outpassRequestFragment).commit();
                 break;
             case R.id.myStudentsItem:
 
-                MyStrudentsFragment myStrudentsFragment = MyStrudentsFragment.newInstance();
+                MyStudentsFragment myStrudentsFragment = MyStudentsFragment.newInstance();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_caretaker_linear, myStrudentsFragment)
                         .commit();
@@ -74,11 +77,29 @@ public class CaretakerActivity extends AppCompatActivity
                 finish();
                 startActivity(new Intent(CaretakerActivity.this, SplashScreen.class).putExtra("CLASS_NAME", 3));
                 break;
+
+            case R.id.allOutpassesItem:
+                AllOutpassesFragment allOutpassesFragment = AllOutpassesFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, allOutpassesFragment).commit();
+                break;
             default:
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_caretaker_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout_caretaker:
+                mAuth.signOut();
+                startActivity(new Intent(this, SplashScreen.class).putExtra(CLASS_NAME, 3));
+                break;
+            default:
+                return false;
+        }
         return true;
     }
 

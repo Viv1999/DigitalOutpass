@@ -7,15 +7,20 @@ public class Hostel {
     public static final String RAMAN_HOUSE = "Raman House";
     public static final String BHABHA_HOUSE = "Bhabha House";
     public static final String BOSE_HOUSE = "Bose House";
-
+    String name;
     static ArrayList<String> ramanHouseList = new ArrayList<String>();
     static ArrayList<String> bhabhaHouseList = new ArrayList<String>();
     static ArrayList<String> boseHouseList = new ArrayList<String>();
-
+    ArrayList<String> members = new ArrayList<>();
+    ArrayList<String> outpasses = new ArrayList<>();
     public Hostel(ArrayList<String> ramanHouseList, ArrayList<String> bhabhaHouseList, ArrayList<String> boseHouseList) {
         this.ramanHouseList = ramanHouseList;
         this.bhabhaHouseList = bhabhaHouseList;
         this.boseHouseList = boseHouseList;
+    }
+
+    public Hostel(String name){
+        this.name = name;
     }
 
     public Hostel() {

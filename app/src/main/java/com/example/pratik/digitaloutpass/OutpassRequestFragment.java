@@ -3,57 +3,157 @@ package com.example.pratik.digitaloutpass;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OutpassRequestFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link OutpassRequestFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class OutpassRequestFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser curUser;
+    DatabaseReference usersRef;
+    DatabaseReference hostelsRef;
+    DatabaseReference outpassesRef;
+    DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+
+    String hostelOfCaretaker;
+
+    ArrayList<Outpass> outpassRequests = new ArrayList<>();
+    OutpassRequestsAdapter requestsAdapter;
     public OutpassRequestFragment() {
-        // Required empty public constructor
+
     }
 
     public static OutpassRequestFragment newInstance() {
         OutpassRequestFragment fragment = new OutpassRequestFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
+        requestsAdapter = new OutpassRequestsAdapter(getContext(), outpassRequests);
+        curUser = mAuth.getCurrentUser();
+        usersRef = database.child("users");
+        hostelsRef = database.child("hostels");
+        outpassesRef = database.child("outpasses");
+
+        usersRef.child(curUser.getUid()).child("hostel").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                hostelOfCaretaker = dataSnapshot.getValue(String.class);
+                hostelsRef.child(hostelOfCaretaker).child("members").addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        final DataSnapshot childId = dataSnapshot;
+                        usersRef.child(dataSnapshot.getValue(String.class).toString()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                final String studentName = dataSnapshot.getValue(String.class).toString();
+                                usersRef.child(childId.getValue(String.class).toString()).child("myOutpasses").addChildEventListener(new ChildEventListener() {
+                                    @Override
+                                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                        outpassesRef.child(dataSnapshot.getValue(String.class).toString()).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                Outpass curOutpass =(Outpass) dataSnapshot.getValue(Outpass.class);
+                                                if(!curOutpass.isVerified()){
+                                                    requestsAdapter.notifyDataSetChanged();
+                                                    outpassRequests.add(curOutpass);
+                                                    curOutpass.setPersonName(studentName);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
 
     }
 
@@ -66,15 +166,15 @@ public class OutpassRequestFragment extends Fragment {
         RecyclerView requestList= view.findViewById(R.id.requestList);
         requestList.setHasFixedSize(true);
 
-        ArrayList<Outpass> requests = new ArrayList<>();
-        requests.add(new Outpass("Pratik Gupta","Champa","IIIT-NR", new Date(),new Date(),"011"));
-        requests.add(new Outpass("Himanshu Khairajani","Raipur","IIIT-NR", new Date(),new Date(),"1234"));
-        requests.add(new Outpass("konduri lakshmi pati verma","Vizak","IIIT-NR", new Date(),new Date(),"23523"));
+//        ArrayList<Outpass> requests = new ArrayList<>();
+//        requests.add(new Outpass("Pratik Gupta","Champa","IIIT-NR", new Date(),new Date(),"011"));
+//        requests.add(new Outpass("Himanshu Khairajani","Raipur","IIIT-NR", new Date(),new Date(),"1234"));
+//        requests.add(new Outpass("konduri lakshmi pati verma","Vizak","IIIT-NR", new Date(),new Date(),"23523"));
 
 
         requestList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        requestList.setAdapter(new requestAdapter(requests));
+        requestList.setAdapter(requestsAdapter);
 
         return view;
 
@@ -118,5 +218,73 @@ public class OutpassRequestFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public class OutpassRequestsAdapter extends RecyclerView.Adapter<OutpassRequestsAdapter.requestViewHolder> {
+
+        private ArrayList<Outpass> requests ;
+        Context ctx;
+        public OutpassRequestsAdapter(Context ctx, ArrayList<Outpass> requests) {
+            this.requests= requests ;
+        }
+
+        @NonNull
+        @Override
+        public requestViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            LayoutInflater inflater= LayoutInflater.from(viewGroup.getContext());
+            View view = inflater.inflate(R.layout.request_items, viewGroup,false);
+            return  new requestViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull requestViewHolder requestViewHolder, int i) {
+
+            final Outpass currentItem = requests.get(i);
+
+            requestViewHolder.name.setText(currentItem.getPersonName());
+            requestViewHolder.id.setText(currentItem.getId()+"");
+            requestViewHolder.from.setText(currentItem.getFrom());
+            requestViewHolder.to.setText(currentItem.getTo());
+    //        requestViewHolder.ReturnDate.setText(currentItem.getReturnDate().toString());
+    //        requestViewHolder.LeavingDate.setText(currentItem.getLeaveDate().toString());
+            Calendar leaveCal = Calendar.getInstance();
+            leaveCal.setTime(currentItem.getLeaveDate());
+            Calendar returnCal = Calendar.getInstance();
+            returnCal.setTime(currentItem.getReturnDate());
+            requestViewHolder.leavingDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
+            requestViewHolder.returnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
+            requestViewHolder.bVerify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentItem.setVerified(true);
+                    outpassesRef.child(""+currentItem.getId()).setValue(currentItem);
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return requests.size() ;
+        }
+
+        public  class requestViewHolder extends RecyclerView.ViewHolder{
+            ImageView image;
+            TextView name,id,from,to,returnDate,leavingDate;
+            Button bVerify, bDeny;
+
+            public requestViewHolder(@NonNull View itemView) {
+                super(itemView);
+                image= itemView.findViewById(R.id.StudentImage);
+                name=itemView.findViewById(R.id.textViewName);
+                id=itemView.findViewById(R.id.textViewOutpassId);
+                from=itemView.findViewById(R.id.textViewFrom);
+                to=itemView.findViewById(R.id.textViewTo);
+                returnDate=itemView.findViewById(R.id.textViewReturnDate);
+                leavingDate =itemView.findViewById(R.id.textViewLeavingDate);
+                bVerify = itemView.findViewById(R.id.accept);
+                bDeny = itemView.findViewById(R.id.deny);
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.example.pratik.digitaloutpass;
 
-public class myStudent {
+public class MyStudent {
 
     private String name;
     private int enroll;
@@ -8,7 +8,7 @@ public class myStudent {
     private long phone;
     //private int profPic;
 
-    public myStudent(String name, int enroll, String branch, long phone//, int profPic
+    public MyStudent(String name, int enroll, String branch, long phone//, int profPic
                       ) {
         this.name = name;
         this.enroll = enroll;
@@ -17,7 +17,7 @@ public class myStudent {
         //this.profPic = profPic;
     }
 
-    public myStudent() {
+    public MyStudent() {
     }
 
     public String getName() {

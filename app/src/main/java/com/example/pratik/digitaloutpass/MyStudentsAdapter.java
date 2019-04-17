@@ -11,37 +11,37 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class myStudentAdapter extends RecyclerView.Adapter<myStudentAdapter.myStudentViewHolder> {
+public class MyStudentsAdapter extends RecyclerView.Adapter<MyStudentsAdapter.MyStudentsViewHolder> {
 
     private Context mctx;
-    private List<myStudent> myStudentList;
+    private List<MyStudent> myStudentList;
 
-    public myStudentAdapter(Context mctx, List<myStudent> myStudentList) {
+    public MyStudentsAdapter(Context mctx, List<MyStudent> myStudentList) {
         this.mctx = mctx;
         this.myStudentList = myStudentList;
     }
 
     @NonNull
     @Override
-    public myStudentViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyStudentsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         LayoutInflater inflater = LayoutInflater.from(mctx);
         View view = inflater.inflate(R.layout.list_layout_my_students, null);
-        return new myStudentViewHolder(view);
+        return new MyStudentsViewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull myStudentViewHolder myStudentViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyStudentsViewHolder viewHolder, int i) {
 
-        myStudent mystudent = myStudentList.get(i);
+        MyStudent mystudent = myStudentList.get(i);
 
-        myStudentViewHolder.nameS.setText(mystudent.getName());
-        myStudentViewHolder.branch.setText(mystudent.getBranch());
-        myStudentViewHolder.enroll.setText(mystudent.getEnroll()+"");
-        myStudentViewHolder.phone.setText(mystudent.getPhone()+"");
+        viewHolder.nameS.setText(mystudent.getName());
+        viewHolder.branch.setText(mystudent.getBranch());
+        viewHolder.enroll.setText(mystudent.getEnroll()+"");
+        viewHolder.phone.setText(mystudent.getPhone()+"");
 
-        //myStudentViewHolder.profPic.setImageDrawable(mctx.getResources().getDrawable(mystudent.getProfPic(),null));
+        //MyStudentsViewHolder.profPic.setImageDrawable(mctx.getResources().getDrawable(mystudent.getProfPic(),null));
 
     }
 
@@ -50,12 +50,12 @@ public class myStudentAdapter extends RecyclerView.Adapter<myStudentAdapter.mySt
         return myStudentList.size();
     }
 
-    public class myStudentViewHolder extends RecyclerView.ViewHolder{
+    public class MyStudentsViewHolder extends RecyclerView.ViewHolder{
 
         ImageView profPic;
         TextView nameS,enroll,branch,phone;
 
-        public myStudentViewHolder(@NonNull View itemView) {
+        public MyStudentsViewHolder(@NonNull View itemView) {
             super(itemView);
             profPic = (ImageView)itemView.findViewById(R.id.profPicCardmy);
             nameS = itemView.findViewById(R.id.nameCardmy);

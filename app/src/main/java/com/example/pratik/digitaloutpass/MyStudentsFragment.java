@@ -21,26 +21,25 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MyStrudentsFragment.OnFragmentInteractionListener} interface
+ * {@link MyStudentsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MyStrudentsFragment#newInstance} factory method to
+ * Use the {@link MyStudentsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyStrudentsFragment extends Fragment {
+public class MyStudentsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
     RecyclerView recyclerView;
-    myStudentAdapter mystudentAdapter;
+    MyStudentsAdapter mystudentAdapter;
 
-    List<myStudent> myStudentList;
+    List<MyStudent> myStudentList;
     DatabaseReference userDatabase;
     FirebaseAuth mAuth;
     DatabaseReference hostelref;
@@ -49,12 +48,12 @@ public class MyStrudentsFragment extends Fragment {
     ArrayList<String> hostelStudents;
 
 
-    public MyStrudentsFragment() {
+    public MyStudentsFragment() {
         // Required empty public constructor
     }
 
-        public static MyStrudentsFragment newInstance() {
-        MyStrudentsFragment fragment = new MyStrudentsFragment();
+        public static MyStudentsFragment newInstance() {
+        MyStudentsFragment fragment = new MyStudentsFragment();
 
         return fragment;
     }
@@ -104,10 +103,10 @@ public class MyStrudentsFragment extends Fragment {
                             if(student.getId().equals(user.getUid())){
                                 continue;
                             }
-                            myStudent mystudent = new myStudent(student.getName(),student.enrollNo,student.branch,student.phoneNo);
+                            MyStudent mystudent = new MyStudent(student.getName(),student.enrollNo,student.branch,student.phoneNo);
                             myStudentList.add(mystudent);
 
-                            mystudentAdapter = new myStudentAdapter(getActivity(),myStudentList);
+                            mystudentAdapter = new MyStudentsAdapter(getActivity(),myStudentList);
                             recyclerView.setAdapter(mystudentAdapter);
 
                         }

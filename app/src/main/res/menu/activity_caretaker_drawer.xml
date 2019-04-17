@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/pendingOutpassesItem" android:icon="@drawable/email"
+            android:title="OUtpass requests"/>
+        <item android:title="My students" android:icon="@drawable/password_lock"
+            android:id="@+id/myStudentsItem"/>
+
+        <item
+            android:title="All outpasses" android:icon="@drawable/crop_image_menu_flip"
+            android:id="@+id/allOutpassesItem"/>
+        <item android:icon="@drawable/logout" android:title="Log out" android:id="@+id/logout_warden_nav"/>
+
+    </group>
+</menu>

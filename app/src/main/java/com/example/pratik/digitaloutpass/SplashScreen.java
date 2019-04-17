@@ -31,6 +31,7 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
     TextView tvLabel;
     private static int SPLASH_TIME_OUT = 4000;
     DatabaseReference curUserRef;
+    public static String CLASS_NAME = "CLASS_NAME";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -38,7 +39,7 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
         setContentView(R.layout.activity_splash_screen);
         FirebaseApp.initializeApp(this);
         Intent intent = getIntent();
-        int classId = intent.getIntExtra("CLASS_NAME", -1);
+        int classId = intent.getIntExtra(CLASS_NAME, -1);
 
         tvLabel = findViewById(R.id.tvLabel);
         mAuth = FirebaseAuth.getInstance();

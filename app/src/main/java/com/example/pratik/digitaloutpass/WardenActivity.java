@@ -1,26 +1,21 @@
 package com.example.pratik.digitaloutpass;
 
 import android.content.Intent;
-import android.icu.util.Freezable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.example.pratik.digitaloutpass.dummy.DummyContent;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,MyStrudentsFragment.OnFragmentInteractionListener
+public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyStudentsFragment.OnFragmentInteractionListener
         {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -62,7 +57,7 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
                 break;
             case R.id.myStudentsItem:
 
-                MyStrudentsFragment myStrudentsFragment = MyStrudentsFragment.newInstance();
+                MyStudentsFragment myStrudentsFragment = MyStudentsFragment.newInstance();
 
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_warden_relative, myStrudentsFragment)
