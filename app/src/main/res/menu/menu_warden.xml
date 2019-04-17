@@ -8,7 +8,7 @@
     android:icon="@drawable/settings_gear"
         app:showAsAction="never" />
     <item
-        android:id="@+id/logout_warden"
+        android:id="@+id/logout_warden_menu"
         android:title="@string/logout"
         app:showAsAction="ifRoom"
         android:icon="@drawable/logout"/>

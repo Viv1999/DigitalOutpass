@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -196,7 +198,7 @@ public class MyOutpassesFragment extends Fragment {
             v.tvLeaveDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
             v.tvReturnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
             v.tvCardId.setText("Outpass ID:  "+ curOutpass.getId());
-
+            v.tvStatus.setText(""+curOutpass.isVerified());
 
         }
 
@@ -215,7 +217,7 @@ public class MyOutpassesFragment extends Fragment {
             TextView tvLeaveDate;
             TextView tvReturnDate;
             TextView tvCardId;
-
+            TextView tvStatus;
             public OutpassesVHolder(@NonNull View itemView) {
                 super(itemView);
                 tvFrom = itemView.findViewById(R.id.tvFromCardOutpass);
@@ -223,6 +225,7 @@ public class MyOutpassesFragment extends Fragment {
                 tvLeaveDate = itemView.findViewById(R.id.tvLeaveDateCardOutpass);
                 tvReturnDate = itemView.findViewById(R.id.tvRetDateCardOutpass);
                 tvCardId = itemView.findViewById(R.id.cardId);
+                tvStatus = itemView.findViewById(R.id.tvStatus);
 
             }
         }

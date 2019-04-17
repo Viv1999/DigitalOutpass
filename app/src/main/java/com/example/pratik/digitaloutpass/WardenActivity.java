@@ -15,11 +15,11 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyStudentsFragment.OnFragmentInteractionListener
-        {
+public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyStudentsFragment.OnFragmentInteractionListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +28,11 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = findViewById(R.id.activity_warden_drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-      NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
         navigationView.setNavigationItemSelectedListener(this);
 
         PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
@@ -47,10 +47,25 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         getMenuInflater().inflate(R.menu.menu_warden, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout_warden_menu:
+                mAuth.signOut();
+                finish();
+                startActivity(new Intent(WardenActivity.this, SplashScreen.class).putExtra("CLASS_NAME", 2));
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.pendingOutpassesItem:
                 PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, pendingOutpasses).commit();
@@ -78,8 +93,8 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-            @Override
-            public void onFragmentInteraction(Uri uri) {
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
-            }
-        }
+    }
+}
