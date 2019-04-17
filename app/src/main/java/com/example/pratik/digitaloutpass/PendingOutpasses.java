@@ -141,7 +141,7 @@ public class PendingOutpasses extends Fragment {
             personName.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    v.tvStudentName.setText("Student name: "+ dataSnapshot.getValue(String.class));
+                    v.tvStudentName.setText(dataSnapshot.getValue(String.class));
                 }
 
                 @Override

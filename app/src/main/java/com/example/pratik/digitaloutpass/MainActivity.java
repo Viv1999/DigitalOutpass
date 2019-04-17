@@ -271,6 +271,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void OnButtonPress(){
+
+
+
+    }
     private void createNewOutpass() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.new_outpass,null);
