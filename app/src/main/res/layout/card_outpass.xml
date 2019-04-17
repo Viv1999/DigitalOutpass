@@ -9,22 +9,47 @@
     android:layout_marginVertical="12dp"
     app:cardElevation="12dp"
     >
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/tvStudentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+
+            android:layout_marginBottom="20dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/cardId"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:fontFamily="sans-serif-black"
-            android:gravity="center" />
+            android:layout_marginStart="30dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+              android:gravity="center"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
         <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+            android:layout_marginTop="40dp">
 
             <TextView
                 android:id="@+id/tvFromLabelCardOutpass"
@@ -110,18 +135,18 @@
             android:layout_marginTop="147dp"
             android:text="Return Date" />
 
+
+        </RelativeLayout>
+
         <TextView
-            android:id="@+id/tvStudentName"
+            android:id="@+id/tvStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="43dp"
-            android:layout_marginTop="176dp" />
+            android:text="TextView"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
-
-
-    </RelativeLayout>
     </LinearLayout>
 
 
