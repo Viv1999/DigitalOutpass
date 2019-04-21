@@ -1,6 +1,7 @@
 package com.example.pratik.digitaloutpass;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -198,7 +199,14 @@ public class MyOutpassesFragment extends Fragment {
             v.tvLeaveDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
             v.tvReturnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
             v.tvCardId.setText("Outpass ID:  "+ curOutpass.getId());
-            v.tvStatus.setText(""+curOutpass.isVerified());
+            if(curOutpass.isVerified()){
+                v.tvStatus.setText("Verified");
+                v.tvStatus.setTextColor(Color.GREEN);
+            }
+            else{
+                v.tvStatus.setTextColor(Color.RED);
+                v.tvStatus.setText("Not verified");
+            }
 
         }
 
