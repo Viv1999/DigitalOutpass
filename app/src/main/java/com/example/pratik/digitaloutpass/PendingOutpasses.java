@@ -137,6 +137,7 @@ public class PendingOutpasses extends Fragment {
             returnCal.setTime(curOutpass.getReturnDate());
             v.tvLeaveDate.setText(leaveCal.get(Calendar.DAY_OF_MONTH)+ "/" + (leaveCal.get(Calendar.MONTH))+"/" + leaveCal.get(Calendar.YEAR));
             v.tvReturnDate.setText(returnCal.get(Calendar.DAY_OF_MONTH)+ "/" + (returnCal.get(Calendar.MONTH))+"/" + returnCal.get(Calendar.YEAR));
+
             v.tvCardId.setText("Outpass id: "+ curOutpass.getId());
             if(curOutpass.isVerified()){
                 v.tvStatus.setText("Verified");
@@ -146,6 +147,7 @@ public class PendingOutpasses extends Fragment {
                 v.tvStatus.setTextColor(Color.RED);
                 v.tvStatus.setText("Not verified");
             }
+
             DatabaseReference personName = FirebaseDatabase.getInstance().getReference("users").child(curOutpass.getPersonName()).child("name");
             personName.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
