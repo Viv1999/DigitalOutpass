@@ -1,5 +1,7 @@
 package com.example.pratik.digitaloutpass;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
@@ -25,6 +27,7 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
         SignupStudentFragment.OnFragmentInteractionListener,
         MyOutpassesFragment.OnFragmentInteractionListener,
         VerificationFragment.OnFragmentInteractionListener{
+    public static  String CHANNEL_ID = "FIREBASE_NOTIFICATION";
     private FirebaseAuth mAuth;
     FragmentManager fragmentManager;
     FirebaseUser curUser;
@@ -41,6 +44,11 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
         Intent intent = getIntent();
         int classId = intent.getIntExtra(CLASS_NAME, -1);
 
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = notificationManager.getNotificationChannel(CHANNEL_ID);
+        }
         tvLabel = findViewById(R.id.tvLabel);
         mAuth = FirebaseAuth.getInstance();
         curUser = mAuth.getCurrentUser();
@@ -100,7 +108,12 @@ public class SplashScreen extends AppCompatActivity implements LoginStudentFragm
     public void onFragmentInteraction(Uri uri) {
 
     }
-
+    // the onSave Instance iis needded
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //No call for super(). Bug on API Level > 11.
+        super.onSaveInstanceState(outState);
+    }
     @Override
     public void switchFragment() {
         Fragment curFragment = getSupportFragmentManager().findFragmentById(R.id.SSConstraintLayout);

@@ -1,5 +1,7 @@
 package com.example.pratik.digitaloutpass;
 
+import java.util.ArrayList;
+
 public class User {
     public static String STUDENT = "STUDENT";
     public static String WARDEN = "WARDEN";
@@ -12,6 +14,8 @@ public class User {
     long phoneNo;
     boolean isEmailVerified = false;
     String uri;
+    String token;
+    ArrayList<String> subscriptions;
 
     public User(String id, String name, String role, String email, long phoneNo, String uri) {
         this.id = id;

@@ -11,131 +11,128 @@
     app:cardElevation="12dp"
     app:contentPadding="10dp">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+<LinearLayout
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical|center">
+
+
+    <TextView
+        android:id="@+id/tvStudentName"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="left|center_vertical"
+        android:gravity="left"
+        android:text=""
+        android:textSize="20sp"
+        android:autoSizeMaxTextSize="20sp"
+        app:autoSizeTextType="uniform"
+        app:fontFamily="sans-serif-medium"
+        />
+    <TextView
+        android:paddingEnd="30dp"
+        android:id="@+id/cardId"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="right|center_vertical"
+        android:gravity="right"
+        android:text="1234"
+        android:textSize="20sp"
+        app:fontFamily="sans-serif-medium"
+        />
+</LinearLayout>
+<LinearLayout
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+
+    >
+
+
+    <TextView
+        android:id="@+id/tvLeaveDateCardOutpass"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:drawableStart="@drawable/ic_today"
+        android:drawablePadding="4dp"
+        android:text="Leaving Date"
+        android:textSize="20sp"
+        app:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+
+        />
+    <TextView
+
+        android:id="@+id/tvRetDateCardOutpass"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:drawableLeft="@drawable/ic_today"
+        android:drawablePadding="4dp"
+        android:text="Return Date"
+        android:textSize="20sp"
+        app:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+
+        />
+</LinearLayout>
+<LinearLayout
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    >
+
+    <TextView
+        android:id="@+id/tvFromCardOutpass"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:drawableLeft="@drawable/ic_place"
+        android:text="FROM"
+        android:textSize="22sp"
+        app:fontFamily="sans-serif-medium"
+        />
+
+    <TextView
+        android:id="@+id/tvToCardOutpass"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_place"
+        android:text="TO"
+        android:textSize="22sp"
+        app:fontFamily="sans-serif-medium"
+        />
+</LinearLayout>
 
         <TextView
-            android:id="@+id/tvStudentName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="44dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:autoSizeMaxTextSize="20sp"
-            android:text="Name"
-            android:textSize="40sp"
-            android:visibility="invisible"
-            app:autoSizeTextType="uniform"
-            app:fontFamily="sans-serif-medium"
-            app:layout_constraintBottom_toTopOf="@+id/tvFromCardOutpass"
-            app:layout_constraintEnd_toStartOf="@+id/cardId"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.6" />
-
-        <TextView
-            android:id="@+id/cardId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="67dp"
-            android:layout_marginBottom="50dp"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:text="1234"
-            android:textSize="20sp"
-            app:fontFamily="sans-serif-medium"
-            app:layout_constraintBottom_toTopOf="@+id/tvToCardOutpass"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.25"
-            app:layout_constraintStart_toEndOf="@+id/tvStudentName"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvLeaveDateCardOutpass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="29dp"
-            android:layout_marginBottom="16dp"
-            android:drawableStart="@drawable/ic_today"
-            android:drawablePadding="4dp"
-            android:text="Leaving Date"
-            android:textSize="20sp"
-            app:fontFamily="sans-serif-medium"
-            app:layout_constraintBottom_toTopOf="@+id/tvStatus"
-            app:layout_constraintEnd_toStartOf="@+id/tvRetDateCardOutpass"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvFromCardOutpass" />
-
-        <TextView
-            android:id="@+id/tvRetDateCardOutpass"
-            android:layout_width="135dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="43dp"
-            android:drawableLeft="@drawable/ic_today"
-            android:drawablePadding="4dp"
-            android:text="Return Date"
-            android:textSize="20sp"
-            app:fontFamily="sans-serif-medium"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tvLeaveDateCardOutpass"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvLeaveDateCardOutpass" />
-
-        <TextView
-            android:id="@+id/tvFromCardOutpass"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="16dp"
-            android:drawableLeft="@drawable/ic_place"
-            android:text="FROM"
-            android:textSize="22sp"
-            app:fontFamily="sans-serif-medium"
-            app:layout_constraintBottom_toTopOf="@+id/tvLeaveDateCardOutpass"
-            app:layout_constraintEnd_toStartOf="@+id/tvToCardOutpass"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvStudentName" />
-
-        <TextView
-            android:id="@+id/tvToCardOutpass"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="41dp"
-            android:layout_marginBottom="17dp"
-            android:drawableLeft="@drawable/ic_place"
-            android:text="TO"
-            android:textSize="22sp"
-            app:fontFamily="sans-serif-medium"
-            app:layout_constraintBottom_toTopOf="@+id/tvRetDateCardOutpass"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvFromCardOutpass"
-            app:layout_constraintTop_toBottomOf="@+id/tvStudentName" />
-
-        <TextView
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:id="@+id/tvStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="29dp"
-            android:layout_marginStart="163dp"
-            android:layout_marginEnd="156dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="TextView"
             android:textSize="18sp"
 
             app:fontFamily="sans-serif-black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

@@ -50,6 +50,7 @@ public class OutpassRequestFragment extends Fragment {
 //    ArrayList<Outpass> outpassRequests = new ArrayList<>();
     ArrayList<String> outpassIds = new ArrayList<String>();
     HashMap<String, Outpass> outpassRequestsMap = new HashMap<>();
+    HashMap<String, String> personNames = new HashMap<>();
     OutpassRequestsAdapter requestsAdapter;
     public OutpassRequestFragment() {
 
@@ -89,13 +90,15 @@ public class OutpassRequestFragment extends Fragment {
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 Outpass curOutpass =(Outpass) dataSnapshot.getValue(Outpass.class);
                                                 if(!curOutpass.isVerified()){
-                                                    curOutpass.setPersonName(studentName);
+//                                                    curOutpass.setPersonName(studentName);
+                                                    personNames.put(dataSnapshot.getKey(), studentName);
 //                                                    outpassRequests.add(curOutpass);
                                                     outpassRequestsMap.put(dataSnapshot.getKey(), curOutpass);
                                                     outpassIds.add(dataSnapshot.getKey());
                                                     requestsAdapter.notifyDataSetChanged();
                                                 }
                                                 else if(outpassRequestsMap.get(dataSnapshot.getKey())!=null){
+                                                    personNames.remove(dataSnapshot.getKey());
                                                     outpassRequestsMap.remove(dataSnapshot.getKey());
                                                     outpassIds.remove(dataSnapshot.getKey());
                                                     requestsAdapter.notifyDataSetChanged();
@@ -256,7 +259,7 @@ public class OutpassRequestFragment extends Fragment {
         public void onBindViewHolder(@NonNull RequestViewHolder requestViewHolder, int i) {
 
             final Outpass currentItem = requests.get(outpassIds.get(i));
-            requestViewHolder.name.setText(currentItem.getPersonName());
+            requestViewHolder.name.setText(personNames.get(outpassIds.get(i)));
             requestViewHolder.id.setText(currentItem.getId()+"");
             requestViewHolder.from.setText(currentItem.getFrom());
             requestViewHolder.to.setText(currentItem.getTo());
@@ -271,9 +274,21 @@ public class OutpassRequestFragment extends Fragment {
             requestViewHolder.bVerify.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "cliked", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "cliked", Toast.LENGTH_SHORT).show();
                     currentItem.setVerified(true);
                     outpassesRef.child(""+currentItem.getId()).child("verified").setValue(true);
+                    usersRef.child(currentItem.getPersonName()).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String studentToken = dataSnapshot.getValue(String.class);
+                            NotificationHelper.sendNotification(studentToken, "Outpass verified", "Your outpass from "+currentItem.getFrom()+" to "+currentItem.getTo()+" has been verified");
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             });
 

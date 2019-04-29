@@ -13,6 +13,8 @@ public class Hostel {
     static ArrayList<String> boseHouseList = new ArrayList<String>();
     ArrayList<String> members = new ArrayList<>();
     ArrayList<String> outpasses = new ArrayList<>();
+    String warden="";
+    String caretaker = "";
     public Hostel(ArrayList<String> ramanHouseList, ArrayList<String> bhabhaHouseList, ArrayList<String> boseHouseList) {
         this.ramanHouseList = ramanHouseList;
         this.bhabhaHouseList = bhabhaHouseList;

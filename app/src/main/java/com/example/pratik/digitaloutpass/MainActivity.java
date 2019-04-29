@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -64,6 +65,9 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> myOutpasses;
     private String hostel;
     DatabaseReference curUserRef;
+    DatabaseReference hostelsRef = FirebaseDatabase.getInstance().getReference("hostels");
+    String caretakerId = "";
+    String caretakerToken = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,28 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 hostel = dataSnapshot.getValue(Student.class).getHostel();
+                hostelsRef.child(hostel).child("caretaker").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        caretakerId = dataSnapshot.getValue(String.class);
+                        usersRef.child(caretakerId).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                             caretakerToken = dataSnapshot.getValue(String.class);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -315,6 +341,7 @@ public class MainActivity extends AppCompatActivity
                 myOutpassesRef.setValue(myOutpasses);
                 outpassesRef.child(outpass.getId()+"").setValue(outpass);
                 curOutpassIdRef.setValue(new Integer(Outpass.curId));
+                NotificationHelper.sendNotification(caretakerToken, "New outpass request", "Please verify this outpass");
                 dialog.dismiss();
             }
         });
@@ -334,5 +361,4 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
-
 }

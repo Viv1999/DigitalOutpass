@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -161,10 +169,10 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
 
 
 
-                        userDatabase.addValueEventListener(new ValueEventListener() {
+                        userDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Toast.makeText(getActivity(),"Inside",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Inside", Toast.LENGTH_SHORT).show();
                                 getRole = dataSnapshot.child("role").getValue(String.class);
 //                                if(!getRole.equals("STUDENT")){
 //
@@ -176,29 +184,43 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
 //
 //                                else {
 
-                                    if (!(user.isEmailVerified())) {
+                                if (!(user.isEmailVerified())) {
 
-                                        //startActivity(new Intent(getContext(), MainActivity.class));
-                                        VerificationFragment verificationFragment = new VerificationFragment();
-                                        getActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.SSConstraintLayout, verificationFragment, "findThisFragment")
-                                                .addToBackStack(null)
-                                                .commit();
-                                    } else {
-
-                                        if (getRole.equals(User.STUDENT)) {
-                                            startActivity(new Intent(getContext(), MainActivity.class));
-
-                                        }else if(getRole.equals(User.WARDEN)){
-                                            startActivity(new Intent(getContext(), WardenActivity.class));
+                                    //startActivity(new Intent(getContext(), MainActivity.class));
+                                    VerificationFragment verificationFragment = new VerificationFragment();
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.SSConstraintLayout, verificationFragment, "findThisFragment")
+                                            .addToBackStack(null)
+                                            .commit();
+                                } else {
+                                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(getActivity(), task.getResult().getId(), Toast.LENGTH_SHORT).show();
+                                                Log.d("FCM", "onComplete: token" + task.getResult().getToken());
+                                                Log.d("FCM", "onComplete: instanceid" + task.getResult().getId());
+                                                String token = task.getResult().getToken();
+                                                userDatabase.child("token").setValue(token);
+                                            }
                                         }
-                                        else{
-                                            startActivity(new Intent(getContext(), CaretakerActivity.class));
-                                        }
+                                    });
+                                    if (getRole.equals(User.STUDENT)) {
+                                        FirebaseMessaging.getInstance().subscribeToTopic("students");
+                                        userDatabase.child("subscriptions").setValue((new ArrayList<String>(Arrays.asList(new String[]{"students"}))));
+                                        startActivity(new Intent(getContext(), MainActivity.class));
+
+                                    } else if (getRole.equals(User.WARDEN)) {
+                                        FirebaseMessaging.getInstance().subscribeToTopic("warden");
+                                        userDatabase.child("subscriptions").setValue((new ArrayList<String>(Arrays.asList(new String[]{"warden"}))));
+                                        startActivity(new Intent(getContext(), WardenActivity.class));
+                                    } else if (getRole.equals(User.CARETAKER)) {
+                                        FirebaseMessaging.getInstance().subscribeToTopic("caretaker");
+                                        userDatabase.child("subscriptions").setValue((new ArrayList<String>(Arrays.asList(new String[]{"caretaker"}))));
+                                        startActivity(new Intent(getContext(), CaretakerActivity.class));
                                     }
-
                                 }
-                            //}
+                            }
 
 
 
