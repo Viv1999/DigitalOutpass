@@ -82,32 +82,10 @@ public class MainActivity extends AppCompatActivity
         curUserRef = usersRef.child(curUser.getUid());
         myOutpassesRef = usersRef.child(curUser.getUid()).child("myOutpasses");
 
-        curUserRef.addValueEventListener(new ValueEventListener() {
+        curUserRef.child("hostel").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                hostel = dataSnapshot.getValue(Student.class).getHostel();
-                hostelsRef.child(hostel).child("caretaker").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        caretakerId = dataSnapshot.getValue(String.class);
-                        usersRef.child(caretakerId).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                             caretakerToken = dataSnapshot.getValue(String.class);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                hostel = dataSnapshot.getValue(String.class);
             }
 
             @Override
@@ -341,7 +319,29 @@ public class MainActivity extends AppCompatActivity
                 myOutpassesRef.setValue(myOutpasses);
                 outpassesRef.child(outpass.getId()+"").setValue(outpass);
                 curOutpassIdRef.setValue(new Integer(Outpass.curId));
-                NotificationHelper.sendNotification(caretakerToken, "New outpass request", "Please verify this outpass");
+                hostelsRef.child(hostel).child("caretaker").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        caretakerId = dataSnapshot.getValue(String.class);
+                        usersRef.child(caretakerId).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                caretakerToken = dataSnapshot.getValue(String.class);
+                                NotificationHelper.sendNotification(caretakerToken, "New outpass request", "Please verify this outpass");
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
                 dialog.dismiss();
             }
         });
