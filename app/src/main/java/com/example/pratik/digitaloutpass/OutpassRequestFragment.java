@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.server.converter.StringToIntConverter;
 import com.google.android.gms.common.util.ArrayUtils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -277,6 +278,20 @@ public class OutpassRequestFragment extends Fragment {
             requestViewHolder.id.setText(currentItem.getId()+"");
             requestViewHolder.from.setText(currentItem.getFrom());
             requestViewHolder.to.setText(currentItem.getTo());
+            usersRef.child(currentItem.getPersonName()).child("imageUrl").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String url = dataSnapshot.getValue(String.class);
+                    Glide.with(getActivity())
+                            .load(url)
+                            .into(requestViewHolder.image);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
     //        RequestViewHolder.ReturnDate.setText(currentItem.getReturnDate().toString());
     //        RequestViewHolder.LeavingDate.setText(currentItem.getLeaveDate().toString());
             Calendar leaveCal = Calendar.getInstance();
