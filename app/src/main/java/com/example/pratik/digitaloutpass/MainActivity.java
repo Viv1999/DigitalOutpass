@@ -209,8 +209,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(this, SplashScreen.class).putExtra("CLASS_NAME", 1));
                 finish();
                 return true;
-            case R.id.action_settings:
-                return true;
 
         }
 
@@ -231,7 +229,7 @@ public class MainActivity extends AppCompatActivity
 
         else if(id == R.id.nav_edit_stu){
 
-            EditProfileFragment editProfileFragment = EditProfileFragment.newInstance();
+            EditProfileFragment editProfileFragment = EditProfileFragment.newInstance(curUser);
             fragmentManager.beginTransaction().replace(R.id.content_main_relative,editProfileFragment).commit();
             //open edit profile fragment here
         }
@@ -310,40 +308,58 @@ public class MainActivity extends AppCompatActivity
         bCreateOutpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                etLeaveDate.setError(null);
+                etReturnDate.setError(null);
                 String to = etTo.getText().toString().trim();
                 String from  = etFrom.getText().toString().trim();
                 Date leaveDate = leaveDateCal.getTime();
                 Date returnDate = returnDateCal.getTime();
-                Outpass outpass = new Outpass(curUser.getUid(), to, from, leaveDate, returnDate, hostel);
-                myOutpasses.add(outpass.getId()+"");
-                myOutpassesRef.setValue(myOutpasses);
-                outpassesRef.child(outpass.getId()+"").setValue(outpass);
-                curOutpassIdRef.setValue(new Integer(Outpass.curId));
-                hostelsRef.child(hostel).child("caretaker").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        caretakerId = dataSnapshot.getValue(String.class);
-                        usersRef.child(caretakerId).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                caretakerToken = dataSnapshot.getValue(String.class);
-                                NotificationHelper.sendNotification(caretakerToken, "New outpass request", "Please verify this outpass");
-                            }
+                if(validateDates(leaveDate, returnDate, etLeaveDate, etReturnDate)) {
+                    Outpass outpass = new Outpass(curUser.getUid(), to, from, leaveDate, returnDate, hostel);
+                    myOutpasses.add(outpass.getId() + "");
+                    myOutpassesRef.setValue(myOutpasses);
+                    outpassesRef.child(outpass.getId() + "").setValue(outpass);
+                    curOutpassIdRef.setValue(new Integer(Outpass.curId));
+                    hostelsRef.child(hostel).child("caretaker").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            caretakerId = dataSnapshot.getValue(String.class);
+                            usersRef.child(caretakerId).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    caretakerToken = dataSnapshot.getValue(String.class);
+                                    NotificationHelper.sendNotification(caretakerToken, "New outpass request", "Please verify this outpass");
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
-                    }
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
-                dialog.dismiss();
+                        }
+                    });
+                    dialog.dismiss();
+                }
             }
+
+            private boolean validateDates(Date leaveDate, Date returnDate, EditText etLeaveDate, EditText etReturnDate) {
+                Date currentDate = new Date();
+                if(leaveDate.compareTo(currentDate)<0){
+                    etLeaveDate.setError("Should be present or future");
+                    return  false;
+                }
+                if(returnDate.compareTo(leaveDate)<0){
+                    etReturnDate.setError("should be on or after leave");
+                    return false;
+                }
+                return  true;
+            }
+
         });
         etLeaveDate.setOnClickListener(new View.OnClickListener() {
             @Override

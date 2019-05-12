@@ -17,12 +17,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pratik Gupta"
+        android:text="Dr Manoj Kumar Majumder"
         android:textColor="#ffffff"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="pratik17100@iiitnr.edu.in"
+        android:text="manojk@iiitnr.edu.in"
         android:textColor="#ffffff"/>
 
 </LinearLayout>

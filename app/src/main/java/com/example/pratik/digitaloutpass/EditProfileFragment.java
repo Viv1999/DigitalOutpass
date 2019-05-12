@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import android.os.Bundle;
@@ -21,17 +23,27 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.w3c.dom.Text;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -46,7 +58,10 @@ public class EditProfileFragment extends Fragment {
 
     private static final int REQUEST_CAMERA = 3;
     private static final int SELECT_FILE = 2;
+    private static final String FILE_NAME = "profilepic";
 
+    FirebaseUser currentUser;
+    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
     EditText nameS;
     EditText phone;
     ImageView prof;
@@ -71,9 +86,9 @@ public class EditProfileFragment extends Fragment {
     }
 
 
-    public static EditProfileFragment newInstance() {
+    public static EditProfileFragment newInstance(FirebaseUser curUser) {
         EditProfileFragment fragment = new EditProfileFragment();
-
+        fragment.currentUser = curUser;
         return fragment;
     }
 
@@ -88,8 +103,8 @@ public class EditProfileFragment extends Fragment {
 
                 //Logic check user
                 FirebaseUser user = mAuth.getCurrentUser();
-                if(user != null){
-                    Intent intent = new Intent(getActivity(),MainActivity.class);
+                if (user != null) {
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                 }
             }
@@ -99,6 +114,7 @@ public class EditProfileFragment extends Fragment {
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,11 +123,10 @@ public class EditProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         nameS = v.findViewById(R.id.edit_name_stu);
         phone = v.findViewById(R.id.edit_phone_stu);
-        prof =v.findViewById(R.id.profPicSet);
+        prof = v.findViewById(R.id.profPicSet);
         save = v.findViewById(R.id.btn_save_stu);
 
         initialize();
-
 
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +152,109 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void initialize() {
+        if (currentUser != null) {
+            if (currentUser.getDisplayName() != null) {
+                nameS.setText(currentUser.getDisplayName());
+                usersRef.child(currentUser.getUid()).child("phoneNo").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (phone.getText() == null || phone.getText().toString().equals("")) {
+                            phone.setText(dataSnapshot.getValue(Long.class) + "");
+                        }
 
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            File curUserImgFile = new File(getActivity().getFilesDir(), FILE_NAME);
+
+            //Bitmap curUserImg = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(curUserImgFile));
+            if (curUserImgFile.exists()) {
+                Glide.with(this)
+                        .load(curUserImgFile)
+                        .into(prof);
+                Toast.makeText(getActivity(), "File image loaded", Toast.LENGTH_SHORT).show();
+            }
+
+            usersRef.child(currentUser.getUid()).child("imageUrl").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot!=null) {
+                        Glide.with(EditProfileFragment.this)
+                                .load(dataSnapshot.getValue(String.class))
+                                .into(prof);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+    }
+
+
+    private void saveImage(Bitmap image) {
+        File file = new File(getActivity().getFilesDir(), FILE_NAME);
+        if (file.exists()) {
+            Toast.makeText(getActivity(), "File already exists,overwriting", Toast.LENGTH_SHORT).show();
+        }
+        //FileOutputStream fileOutputStream = new FileOutputStream(file);
+        try {
+            image.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
+            Toast.makeText(getActivity(), "image saved", Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+//        uploadImageToFirebase();
+    }
+
+    private void uploadImageToFirebase(String username, long phoneno) {
+        StorageReference mChildStorage = mStorageRef.child("User_Profile").child(currentUser.getEmail() + ".jpeg");
+        String profilePicUrl = imageHoldUri.getLastPathSegment();
+
+        mChildStorage.putFile(imageHoldUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            mChildStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    String imageUrl = uri.toString();
+                    usersRef.child(currentUser.getUid()).child("imageurl").setValue(imageUrl);
+
+                }
+            });
+                usersRef.child(currentUser.getUid()).child("name").setValue(username);
+                usersRef.child(currentUser.getUid()).child("phoneNo").setValue(phoneno);
+
+
+                mProgress.dismiss();
+                Bitmap image = null;
+                try {
+                    image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageHoldUri);
+                    saveImage(image);
+                } catch (IOException e) {
+//                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Unable to save file locally", Toast.LENGTH_SHORT).show();
+                }
+                MyOutpassesFragment myOutpassesFragment = MyOutpassesFragment.newInstance();
+                getActivity().getFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_main_relative, myOutpassesFragment, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+
+                //finish fragment
+
+
+            }
+        });
     }
 
     private void saveUserProfile() {
@@ -149,58 +266,27 @@ public class EditProfileFragment extends Fragment {
         username = nameS.getText().toString().trim();
         phoneno = Long.parseLong(phone.getText().toString());
 
-        if( !TextUtils.isEmpty(username) && !TextUtils.isEmpty(String.valueOf(phoneno)))
-        {
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(String.valueOf(phoneno))) {
 
-            if( imageHoldUri != null )
-            {
-
-                mProgress.setTitle("Saving Profile");
-                mProgress.setMessage("Please wait....");
+            if (imageHoldUri != null) {
+                mProgress = ProgressDialog.show(getActivity(), "Saving profile", "Please wai...");
+//                mProgress.setTitle("Saveing Profile");
+//                mProgress.setMessage("Please wait....");
+//                mProgress.show();
                 mProgress.show();
 
-                StorageReference mChildStorage = mStorageRef.child("User_Profile").child(imageHoldUri.getLastPathSegment());
-                String profilePicUrl = imageHoldUri.getLastPathSegment();
-
-                mChildStorage.putFile(imageHoldUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        final String imageUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
-
-                        uref.child("name").setValue(username);
-                        uref.child("phoneNo").setValue(phoneno);
-
-                        uref.child("imageurl").setValue(imageUrl);
-
-                        mProgress.dismiss();
-
-                        MyOutpassesFragment myOutpassesFragment = MyOutpassesFragment.newInstance();
-                        getActivity().getFragmentManager().popBackStack();
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.content_main_relative, myOutpassesFragment, "findThisFragment")
-                                .addToBackStack(null)
-                                .commit();
-
-                        //finish fragment
-
-
-                    }
-                });
-            }else
-            {
+                uploadImageToFirebase(username, phoneno);
+            } else {
 
                 Toast.makeText(getActivity(), "Please select the profile pic", Toast.LENGTH_LONG).show();
 
             }
 
-        }else
-        {
+        } else {
 
             Toast.makeText(getActivity(), "Please enter username and status", Toast.LENGTH_LONG).show();
 
         }
-
 
 
     }
@@ -212,6 +298,50 @@ public class EditProfileFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, SELECT_FILE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(getActivity(), "onActivityResult", Toast.LENGTH_SHORT).show();
+        if (requestCode == REQUEST_CAMERA && data != null && resultCode == RESULT_OK) {
+            imageHoldUri = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getActivity().getContentResolver().query(imageHoldUri,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+
+            Bitmap image = null;
+            try {
+                image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageHoldUri);
+                prof.setImageBitmap(image);
+//                saveImage(image);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == SELECT_FILE && data != null && resultCode == RESULT_OK) {
+            Toast.makeText(getActivity(), "seleted file", Toast.LENGTH_SHORT).show();
+            imageHoldUri = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getActivity().getContentResolver().query(imageHoldUri,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+
+            Bitmap image = null;
+            try {
+                image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageHoldUri);
+                prof.setImageBitmap(image);
+//                saveImage(image);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void cameraIntent() {

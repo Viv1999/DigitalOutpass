@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
-        <item android:id="@+id/pendingOutpassesItem" android:icon="@drawable/email"
+        <item android:id="@+id/pendingOutpasses" android:icon="@drawable/email"
             android:title="OUtpass requests"/>
         <item android:title="My students" android:icon="@drawable/password_lock"
             android:id="@+id/myStudentsItem"/>

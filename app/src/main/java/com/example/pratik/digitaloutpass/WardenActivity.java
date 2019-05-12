@@ -1,5 +1,6 @@
 package com.example.pratik.digitaloutpass;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -15,7 +16,7 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyStudentsFragment.OnFragmentInteractionListener {
+public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyStudentsFragment.OnFragmentInteractionListener, OutpassRequestFragment.OnFragmentInteractionListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     FirebaseAuth mAuth;
@@ -35,8 +36,8 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
         navigationView.setNavigationItemSelectedListener(this);
 
-        PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, pendingOutpasses).commit();
+        HostelOutpassesFragment hostelOutpassesFragment = HostelOutpassesFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, hostelOutpassesFragment).commit();
 
 
     }
@@ -66,9 +67,13 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-            case R.id.pendingOutpassesItem:
-                PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, pendingOutpasses).commit();
+            case R.id.hostelOutpasses:
+                HostelOutpassesFragment hostelOutpassesFragment = HostelOutpassesFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, hostelOutpassesFragment).commit();
+                break;
+            case R.id.pendingOutpasses:
+                OutpassRequestFragment outpassRequestFragment = OutpassRequestFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, outpassRequestFragment).commit();
                 break;
             case R.id.myStudentsItem:
 

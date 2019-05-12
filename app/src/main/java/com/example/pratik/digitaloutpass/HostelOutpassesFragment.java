@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,12 +21,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class PendingOutpasses extends Fragment {
+public class HostelOutpassesFragment extends Fragment {
     String curHostel;
     FirebaseAuth mAuth;
     FirebaseUser curUser;
@@ -36,9 +33,9 @@ public class PendingOutpasses extends Fragment {
     DatabaseReference curUserRef;
     RecyclerView rView;
     TextView tvNoOutpasses;
-    public static PendingOutpasses newInstance(){
-        PendingOutpasses pendingOutpasses = new PendingOutpasses();
-        return pendingOutpasses;
+    public static HostelOutpassesFragment newInstance(){
+        HostelOutpassesFragment hostelOutpassesFragment = new HostelOutpassesFragment();
+        return hostelOutpassesFragment;
     }
 
     @Override
