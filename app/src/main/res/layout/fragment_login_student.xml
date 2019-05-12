@@ -54,24 +54,21 @@
         android:text="Login" />
 
     <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/bloginAsWarden"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/bloginAsWarden"-->
 
-        <!--android:text = "Login as Warden"/>-->
+    <!--android:text = "Login as Warden"/>-->
 
     <TextView
         android:id="@+id/tvGoToSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:text="New User? Signup"
         android:textSize="24sp" />
 
     <TextView
         android:id="@+id/tvForgot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text= "Forgot Password"
         android:textSize="24dp"/>
 </LinearLayout>
