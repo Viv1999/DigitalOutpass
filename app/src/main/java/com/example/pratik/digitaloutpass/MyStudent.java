@@ -6,15 +6,15 @@ public class MyStudent {
     private int enroll;
     private String branch;
     private long phone;
-    //private int profPic;
+    private String imageUrl;
 
-    public MyStudent(String name, int enroll, String branch, long phone//, int profPic
+    public MyStudent(String name, int enroll, String branch, long phone, String imageUrl
                       ) {
         this.name = name;
         this.enroll = enroll;
         this.branch = branch;
         this.phone = phone;
-        //this.profPic = profPic;
+        this.imageUrl = imageUrl;
     }
 
     public MyStudent() {
@@ -56,7 +56,17 @@ public class MyStudent {
 //        return profPic;
 //    }
 //
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 //    public void setProfPic(int profPic) {
 //        this.profPic = profPic;
 //    }
+
+
 }
