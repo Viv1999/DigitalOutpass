@@ -155,7 +155,7 @@ public class EditProfileFragment extends Fragment {
             if( imageHoldUri != null )
             {
 
-                mProgress.setTitle("Saveing Profile");
+                mProgress.setTitle("Saving Profile");
                 mProgress.setMessage("Please wait....");
                 mProgress.show();
 
