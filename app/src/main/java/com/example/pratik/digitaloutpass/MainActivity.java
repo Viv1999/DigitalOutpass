@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity
 
         else if(id == R.id.nav_edit_stu){
 
-            EditProfileFragment editProfileFragment = EditProfileFragment.newInstance();
+            EditProfileFragment editProfileFragment = EditProfileFragment.newInstance(curUser);
             fragmentManager.beginTransaction().replace(R.id.content_main_relative,editProfileFragment).commit();
             //open edit profile fragment here
         }
