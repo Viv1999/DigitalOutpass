@@ -38,6 +38,8 @@ public class OutpassRequestFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    TextView tvNoOutpasses;
+    RecyclerView requestList;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser curUser;
     DatabaseReference usersRef;
@@ -103,6 +105,15 @@ public class OutpassRequestFragment extends Fragment {
                                                         outpassRequestsMap.remove(dataSnapshot.getKey());
                                                         outpassIds.remove(dataSnapshot.getKey());
                                                         requestsAdapter.notifyDataSetChanged();
+                                                    }
+                                                    if(requestList!=null && tvNoOutpasses!=null) {
+                                                        if (outpassIds.isEmpty()) {
+                                                            tvNoOutpasses.setVisibility(View.VISIBLE);
+                                                            requestList.setVisibility(View.GONE);
+                                                        } else {
+                                                            tvNoOutpasses.setVisibility(View.GONE);
+                                                            requestList.setVisibility(View.VISIBLE);
+                                                        }
                                                     }
                                                 }
 
@@ -181,8 +192,9 @@ public class OutpassRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_outpass_request, container, false);
+        tvNoOutpasses = view.findViewById(R.id.tvNoOutpasses);
 
-        RecyclerView requestList= view.findViewById(R.id.requestList);
+        requestList= view.findViewById(R.id.requestList);
         requestList.setHasFixedSize(true);
 
 //        ArrayList<Outpass> requests = new ArrayList<>();

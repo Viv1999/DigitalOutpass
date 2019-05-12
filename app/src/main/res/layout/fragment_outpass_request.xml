@@ -7,6 +7,15 @@
     tools:context=".OutpassRequestFragment"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tvNoOutpasses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:text="No outpasses!" />
+
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,9 +23,10 @@
         android:id="@+id/requestList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/darker_gray"
         android:padding="4dp"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:visibility="gone"
+        android:layout_weight="1">
 
     </android.support.v7.widget.RecyclerView>
 
