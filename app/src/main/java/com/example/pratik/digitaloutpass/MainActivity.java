@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +28,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -69,6 +72,8 @@ public class MainActivity extends AppCompatActivity
     String caretakerId = "";
     String caretakerToken = "";
 
+    ImageView dpStudentNavHeader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +86,6 @@ public class MainActivity extends AppCompatActivity
         curUser = mAuth.getCurrentUser();
         curUserRef = usersRef.child(curUser.getUid());
         myOutpassesRef = usersRef.child(curUser.getUid()).child("myOutpasses");
-
         curUserRef.child("hostel").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -161,12 +165,20 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         final TextView tvName = (TextView)headerView.findViewById(R.id.tvName);
         final TextView tvEmail = (TextView)headerView.findViewById(R.id.tvEmail);
+        dpStudentNavHeader = (ImageView) headerView.findViewById(R.id.dpStudentNavHeader);
+
         curUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 tvName.setText(dataSnapshot.child("name").getValue(String.class));
                 tvEmail.setText(dataSnapshot.child("email").getValue(String.class));
+                if(dataSnapshot.child("imageUrl")!=null && dataSnapshot.child("imageUrl").getValue(String.class) != null) {
+
+                    Glide.with(MainActivity.this)
+                            .load(dataSnapshot.child("imageUrl").getValue(String.class).toString())
+                            .into(dpStudentNavHeader);
+                }
 
             }
 
@@ -223,14 +235,18 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_all_outpasses) {
             MyOutpassesFragment outpassesFragment = MyOutpassesFragment.newInstance();
-            fragmentManager.beginTransaction().replace(R.id.content_main_relative, outpassesFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_main_relative, outpassesFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
 
         }
 
         else if(id == R.id.nav_edit_stu){
 
             EditProfileFragment editProfileFragment = EditProfileFragment.newInstance(curUser);
-            fragmentManager.beginTransaction().replace(R.id.content_main_relative,editProfileFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_main_relative,editProfileFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
             //open edit profile fragment here
         }
 
