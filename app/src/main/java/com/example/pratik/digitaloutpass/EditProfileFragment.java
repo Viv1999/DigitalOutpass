@@ -205,7 +205,7 @@ public class EditProfileFragment extends Fragment {
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                 prof.setImageBitmap(resource);
                                 bitmap[0]= resource;
-                                imageHoldUri  = getImageUri(getContext(),bitmap[0]);
+//                                imageHoldUri  = getImageUri(getContext(),bitmap[0]);
                             }
                         });
 
@@ -228,7 +228,7 @@ public class EditProfileFragment extends Fragment {
                                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                         prof.setImageBitmap(resource);
                                         bitmap[0]= resource;
-                                        imageHoldUri  = getImageUri(getContext(),bitmap[0]);
+//                                        imageHoldUri  = getImageUri(getContext(),bitmap[0]);
 
                                     }
                                 });
@@ -289,6 +289,8 @@ public class EditProfileFragment extends Fragment {
 //                    e.printStackTrace();
                     Toast.makeText(getActivity(), "Unable to save file locally", Toast.LENGTH_SHORT).show();
                 }
+
+                Toast.makeText(getActivity(), "Updated successfully", Toast.LENGTH_SHORT).show();
 //                Activity parentActivity= getActivity();
 //                getActivity().getFragmentManager().popBackStack();
 //                if(parentActivity instanceof MainActivity) {
@@ -303,7 +305,7 @@ public class EditProfileFragment extends Fragment {
 //                }
 
                 //finish fragment
-                getActivity().getSupportFragmentManager().beginTransaction().remove(EditProfileFragment.this).commit();
+//                getActivity().getSupportFragmentManager().beginTransaction().remove(EditProfileFragment.this).commit();
 //                getActivity().getSupportFragmentManager().popBackStackImmediate();
 
             }
@@ -322,7 +324,7 @@ public class EditProfileFragment extends Fragment {
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(String.valueOf(phoneno))) {
 
             if (imageHoldUri != null) {
-                mProgress = ProgressDialog.show(getActivity(), "Saving profile", "Please wai...");
+                mProgress = ProgressDialog.show(getActivity(), "Saving profile", "Please wait...");
 //                mProgress.setTitle("Saveing Profile");
 //                mProgress.setMessage("Please wait....");
 //                mProgress.show();
