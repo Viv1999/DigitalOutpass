@@ -10,18 +10,20 @@
     <ImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
-
+        android:id="@+id/dpWardenCaretakerNavHeader"
         android:src="@drawable/warden_pic"
 
         />
     <TextView
         android:layout_width="wrap_content"
+        android:id="@+id/tvNameWardenCaretakerNavHeader"
         android:layout_height="wrap_content"
         android:text="Dr Manoj Kumar Majumder"
         android:textColor="#ffffff"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/tvEmailWardenCaretakerNavHeader"
         android:text="manojk@iiitnr.edu.in"
         android:textColor="#ffffff"/>
 

@@ -6,10 +6,18 @@ public class MyStudent {
     private int enroll;
     private String branch;
     private long phone;
+    private String imageUrl;
     //private int profPic;
 
-    public MyStudent(String name, int enroll, String branch, long phone//, int profPic
-                      ) {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public MyStudent(String name, int enroll, String branch, long phone) {
         this.name = name;
         this.enroll = enroll;
         this.branch = branch;
