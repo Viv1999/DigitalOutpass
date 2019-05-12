@@ -35,8 +35,8 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
         navigationView.setNavigationItemSelectedListener(this);
 
-        PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, pendingOutpasses).commit();
+        HostelOutpassesFragment hostelOutpassesFragment = HostelOutpassesFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, hostelOutpassesFragment).commit();
 
 
     }
@@ -66,9 +66,9 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-            case R.id.pendingOutpassesItem:
-                PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, pendingOutpasses).commit();
+            case R.id.hostelOutpasses:
+                HostelOutpassesFragment hostelOutpassesFragment = HostelOutpassesFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, hostelOutpassesFragment).commit();
                 break;
             case R.id.myStudentsItem:
 

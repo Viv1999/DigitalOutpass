@@ -46,7 +46,7 @@ public class CaretakerActivity extends AppCompatActivity
 
         OutpassRequestFragment outpassRequestFragment = OutpassRequestFragment.newInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, outpassRequestFragment).commit();
-//        PendingOutpasses pendingOutpasses = PendingOutpasses.newInstance();
+//        HostelOutpassesFragment pendingOutpasses = HostelOutpassesFragment.newInstance();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, pendingOutpasses).commit();
     }
 
@@ -60,7 +60,7 @@ public class CaretakerActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.pendingOutpassesItem:
+            case R.id.pendingOutpasses:
                 OutpassRequestFragment outpassRequestFragment = OutpassRequestFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_caretaker_linear, outpassRequestFragment).commit();
                 break;

@@ -209,8 +209,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(this, SplashScreen.class).putExtra("CLASS_NAME", 1));
                 finish();
                 return true;
-            case R.id.action_settings:
-                return true;
 
         }
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".PendingOutpasses"
+    tools:context=".HostelOutpassesFragment"
     android:orientation="vertical">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:textAlignment="center"
         android:gravity="center_vertical"
-        android:text="You got no outpasses!" />
+        android:text="No outpasses!" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMyOutpasses"
