@@ -162,11 +162,13 @@ public class EditProfileFragment extends Fragment {
         try {
             inImage.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
 //            String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "path", null);
-            return Uri.parse(file.getAbsolutePath());
+//            return Uri.parse(file.getAbsolutePath());
+            return  Uri.fromFile(file);
         } catch (FileNotFoundException e) {
+
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     private void initialize() {
@@ -205,7 +207,7 @@ public class EditProfileFragment extends Fragment {
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                 prof.setImageBitmap(resource);
                                 bitmap[0]= resource;
-//                                imageHoldUri  = getImageUri(getContext(),bitmap[0]);
+                                imageHoldUri  = getImageUri(getContext(),bitmap[0]);
                             }
                         });
 
@@ -228,7 +230,7 @@ public class EditProfileFragment extends Fragment {
                                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                         prof.setImageBitmap(resource);
                                         bitmap[0]= resource;
-//                                        imageHoldUri  = getImageUri(getContext(),bitmap[0]);
+                                        imageHoldUri  = getImageUri(getContext(),bitmap[0]);
 
                                     }
                                 });
@@ -360,32 +362,27 @@ public class EditProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         Toast.makeText(getActivity(), "onActivityResult", Toast.LENGTH_SHORT).show();
         if (requestCode == REQUEST_CAMERA && data != null && resultCode == RESULT_OK) {
-            imageHoldUri = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getActivity().getContentResolver().query(imageHoldUri,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//            Cursor cursor = getActivity().getContentResolver().query(imageHoldUri,
+//                    filePathColumn, null, null, null);
+//            cursor.moveToFirst();
+//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//            String picturePath = cursor.getString(columnIndex);
 
-            Bitmap image = null;
-            try {
-                image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageHoldUri);
-                prof.setImageBitmap(image);
-//                saveImage(image);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            prof.setImageBitmap(image);
+            imageHoldUri = getImageUri(getContext(), image);
+
         } else if (requestCode == SELECT_FILE && data != null && resultCode == RESULT_OK) {
             Toast.makeText(getActivity(), "seleted file", Toast.LENGTH_SHORT).show();
             imageHoldUri = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getActivity().getContentResolver().query(imageHoldUri,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//            Cursor cursor = getActivity().getContentResolver().query(imageHoldUri,
+//                    filePathColumn, null, null, null);
+//            cursor.moveToFirst();
+//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//            String picturePath = cursor.getString(columnIndex);
 
             Bitmap image = null;
             try {
