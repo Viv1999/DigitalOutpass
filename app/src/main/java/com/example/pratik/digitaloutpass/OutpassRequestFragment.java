@@ -78,60 +78,62 @@ public class OutpassRequestFragment extends Fragment {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         final DataSnapshot childId = dataSnapshot;
+
                         usersRef.child(dataSnapshot.getValue(String.class).toString()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                final String studentName = dataSnapshot.getValue(String.class).toString();
-                                usersRef.child(childId.getValue(String.class).toString()).child("myOutpasses").addChildEventListener(new ChildEventListener() {
-                                    @Override
-                                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                        outpassesRef.child(dataSnapshot.getValue(String.class).toString()).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                Outpass curOutpass =(Outpass) dataSnapshot.getValue(Outpass.class);
-                                                if(!curOutpass.isVerified()){
+                                if(dataSnapshot.getValue(String.class)!=null && !dataSnapshot.getValue(String.class).toString().equals("")) {
+                                    final String studentName = dataSnapshot.getValue(String.class).toString();
+                                    usersRef.child(childId.getValue(String.class).toString()).child("myOutpasses").addChildEventListener(new ChildEventListener() {
+                                        @Override
+                                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                            outpassesRef.child(dataSnapshot.getValue(String.class).toString()).addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    Outpass curOutpass = (Outpass) dataSnapshot.getValue(Outpass.class);
+                                                    if (!curOutpass.isVerified()) {
 //                                                    curOutpass.setPersonName(studentName);
-                                                    personNames.put(dataSnapshot.getKey(), studentName);
+                                                        personNames.put(dataSnapshot.getKey(), studentName);
 //                                                    outpassRequests.add(curOutpass);
-                                                    outpassRequestsMap.put(dataSnapshot.getKey(), curOutpass);
-                                                    outpassIds.add(dataSnapshot.getKey());
-                                                    requestsAdapter.notifyDataSetChanged();
+                                                        outpassRequestsMap.put(dataSnapshot.getKey(), curOutpass);
+                                                        outpassIds.add(dataSnapshot.getKey());
+                                                        requestsAdapter.notifyDataSetChanged();
+                                                    } else if (outpassRequestsMap.get(dataSnapshot.getKey()) != null) {
+                                                        personNames.remove(dataSnapshot.getKey());
+                                                        outpassRequestsMap.remove(dataSnapshot.getKey());
+                                                        outpassIds.remove(dataSnapshot.getKey());
+                                                        requestsAdapter.notifyDataSetChanged();
+                                                    }
                                                 }
-                                                else if(outpassRequestsMap.get(dataSnapshot.getKey())!=null){
-                                                    personNames.remove(dataSnapshot.getKey());
-                                                    outpassRequestsMap.remove(dataSnapshot.getKey());
-                                                    outpassIds.remove(dataSnapshot.getKey());
-                                                    requestsAdapter.notifyDataSetChanged();
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                                                 }
-                                            }
+                                            });
+                                        }
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        @Override
+                                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                                            }
-                                        });
-                                    }
+                                        }
 
-                                    @Override
-                                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                        @Override
+                                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                                    }
+                                        }
 
-                                    @Override
-                                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                                        @Override
+                                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                                    }
+                                        }
 
-                                    @Override
-                                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
+                                        }
+                                    });
+                                }
                             }
 
                             @Override
