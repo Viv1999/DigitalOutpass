@@ -8,8 +8,10 @@ public class MyStudent {
     private long phone;
     private String imageUrl;
 
+
     public MyStudent(String name, int enroll, String branch, long phone, String imageUrl
                       ) {
+
         this.name = name;
         this.enroll = enroll;
         this.branch = branch;
@@ -17,8 +19,7 @@ public class MyStudent {
         this.imageUrl = imageUrl;
     }
 
-    public MyStudent() {
-    }
+
 
     public String getName() {
         return name;

@@ -7,7 +7,10 @@
             android:title="Pending outpasses"/>
         <item android:title="My students" android:icon="@drawable/password_lock"
             android:id="@+id/myStudentsItem"/>
-
+        <item
+            android:id="@+id/navEditWarden"
+            android:icon="@drawable/ic_edit_profile"
+            android:title="Edit Profile"/>
         <item android:icon="@drawable/logout" android:title="Log out" android:id="@+id/logout_warden_nav"/>
 
     </group>

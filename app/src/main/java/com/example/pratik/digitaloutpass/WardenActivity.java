@@ -1,10 +1,10 @@
 package com.example.pratik.digitaloutpass;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,19 +13,41 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MyStudentsFragment.OnFragmentInteractionListener, OutpassRequestFragment.OnFragmentInteractionListener {
+public class WardenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        MyStudentsFragment.OnFragmentInteractionListener,
+        OutpassRequestFragment.OnFragmentInteractionListener,
+        EditProfileFragment.OnFragmentInteractionListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     FirebaseAuth mAuth;
+    DatabaseReference usersRef;
+    DatabaseReference curUserRef;
+    FirebaseUser currentUser;
+
+    ImageView dpWardenNavHeader;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_warden);
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        usersRef = FirebaseDatabase.getInstance().getReference("users");
+        curUserRef = usersRef.child(currentUser.getUid());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = findViewById(R.id.activity_warden_drawer_layout);
@@ -35,6 +57,31 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_warden);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        final TextView tvName = (TextView) headerView.findViewById(R.id.tvNameWardenCaretakerNavHeader);
+        final TextView tvEmail = (TextView) headerView.findViewById(R.id.tvEmailWardenCaretakerNavHeader);
+        dpWardenNavHeader = (ImageView) headerView.findViewById(R.id.dpWardenCaretakerNavHeader);
+
+        curUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                tvName.setText(dataSnapshot.child("name").getValue(String.class));
+                tvEmail.setText(dataSnapshot.child("email").getValue(String.class));
+                if (dataSnapshot.child("imageUrl") != null && dataSnapshot.child("imageUrl").getValue(String.class) != null) {
+
+                    Glide.with(WardenActivity.this)
+                            .load(dataSnapshot.child("imageUrl").getValue(String.class).toString())
+                            .into(dpWardenNavHeader);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         HostelOutpassesFragment hostelOutpassesFragment = HostelOutpassesFragment.newInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, hostelOutpassesFragment).commit();
@@ -69,11 +116,15 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
         switch (menuItem.getItemId()) {
             case R.id.hostelOutpasses:
                 HostelOutpassesFragment hostelOutpassesFragment = HostelOutpassesFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, hostelOutpassesFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, hostelOutpassesFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
                 break;
             case R.id.pendingOutpasses:
                 OutpassRequestFragment outpassRequestFragment = OutpassRequestFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, outpassRequestFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_warden_relative, outpassRequestFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
                 break;
             case R.id.myStudentsItem:
 
@@ -81,9 +132,16 @@ public class WardenActivity extends AppCompatActivity implements NavigationView.
 
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_warden_relative, myStrudentsFragment)
-
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
                 //load fragment here
+                break;
+            case R.id.navEditWarden:
+                EditProfileFragment editProfileFragment = EditProfileFragment.newInstance(FirebaseAuth.getInstance().getCurrentUser());
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_warden_relative, editProfileFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
                 break;
             case R.id.logout_warden_nav:
                 mAuth.signOut();

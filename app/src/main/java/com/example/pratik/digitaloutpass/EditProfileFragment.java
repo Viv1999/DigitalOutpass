@@ -1,5 +1,6 @@
 package com.example.pratik.digitaloutpass;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -24,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,10 +42,12 @@ import com.google.firebase.storage.UploadTask;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -151,16 +157,29 @@ public class EditProfileFragment extends Fragment {
 
     }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        File file = new File(getActivity().getFilesDir(), FILE_NAME);
+        try {
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
+//            String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "path", null);
+            return Uri.parse(file.getAbsolutePath());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private void initialize() {
         if (currentUser != null) {
             if (currentUser.getDisplayName() != null) {
-                nameS.setText(currentUser.getDisplayName());
-                usersRef.child(currentUser.getUid()).child("phoneNo").addListenerForSingleValueEvent(new ValueEventListener() {
+//                nameS.setText(currentUser.getDisplayName());
+                usersRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (phone.getText() == null || phone.getText().toString().equals("")) {
-                            phone.setText(dataSnapshot.getValue(Long.class) + "");
+                            phone.setText(dataSnapshot.child("phoneNo").getValue(Long.class) + "");
                         }
+                        nameS.setText(dataSnapshot.child("name").getValue(String.class));
 
                     }
 
@@ -174,9 +193,22 @@ public class EditProfileFragment extends Fragment {
 
             //Bitmap curUserImg = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(curUserImgFile));
             if (curUserImgFile.exists()) {
-                Glide.with(this)
+//                Glide.with(this)
+//                        .load(curUserImgFile)
+//                        .into(prof);
+                Bitmap bitmap[] = new Bitmap[1];
+                Glide.with(getActivity())
+                        .asBitmap()
                         .load(curUserImgFile)
-                        .into(prof);
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                prof.setImageBitmap(resource);
+                                bitmap[0]= resource;
+//                                imageHoldUri  = getImageUri(getContext(),bitmap[0]);
+                            }
+                        });
+
                 Toast.makeText(getActivity(), "File image loaded", Toast.LENGTH_SHORT).show();
             }
 
@@ -184,9 +216,23 @@ public class EditProfileFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot!=null) {
-                        Glide.with(EditProfileFragment.this)
+//                        Glide.with(EditProfileFragment.this)
+//                                .load(dataSnapshot.getValue(String.class))
+//                                .into(prof);
+                        Bitmap bitmap[] = new Bitmap[1];
+                        Glide.with(getActivity())
+                                .asBitmap()
                                 .load(dataSnapshot.getValue(String.class))
-                                .into(prof);
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        prof.setImageBitmap(resource);
+                                        bitmap[0]= resource;
+//                                        imageHoldUri  = getImageUri(getContext(),bitmap[0]);
+
+                                    }
+                                });
+
                     }
                 }
 
@@ -226,7 +272,7 @@ public class EditProfileFragment extends Fragment {
                 @Override
                 public void onSuccess(Uri uri) {
                     String imageUrl = uri.toString();
-                    usersRef.child(currentUser.getUid()).child("imageurl").setValue(imageUrl);
+                    usersRef.child(currentUser.getUid()).child("imageUrl").setValue(imageUrl);
 
                 }
             });
@@ -243,15 +289,24 @@ public class EditProfileFragment extends Fragment {
 //                    e.printStackTrace();
                     Toast.makeText(getActivity(), "Unable to save file locally", Toast.LENGTH_SHORT).show();
                 }
-                MyOutpassesFragment myOutpassesFragment = MyOutpassesFragment.newInstance();
-                getActivity().getFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_main_relative, myOutpassesFragment, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
+
+                Toast.makeText(getActivity(), "Updated successfully", Toast.LENGTH_SHORT).show();
+//                Activity parentActivity= getActivity();
+//                getActivity().getFragmentManager().popBackStack();
+//                if(parentActivity instanceof MainActivity) {
+//                    MyOutpassesFragment myOutpassesFragment = MyOutpassesFragment.newInstance();
+//                    getActivity().getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.content_main_relative, myOutpassesFragment, "findThisFragment")
+//                            .addToBackStack(null)
+//                            .commit();
+//                }
+//                else if(parentActivity instanceof  WardenActivity){
+//
+//                }
 
                 //finish fragment
-
+//                getActivity().getSupportFragmentManager().beginTransaction().remove(EditProfileFragment.this).commit();
+//                getActivity().getSupportFragmentManager().popBackStackImmediate();
 
             }
         });
@@ -269,7 +324,7 @@ public class EditProfileFragment extends Fragment {
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(String.valueOf(phoneno))) {
 
             if (imageHoldUri != null) {
-                mProgress = ProgressDialog.show(getActivity(), "Saving profile", "Please wai...");
+                mProgress = ProgressDialog.show(getActivity(), "Saving profile", "Please wait...");
 //                mProgress.setTitle("Saveing Profile");
 //                mProgress.setMessage("Please wait....");
 //                mProgress.show();
