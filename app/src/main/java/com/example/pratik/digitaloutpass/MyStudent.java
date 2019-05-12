@@ -7,26 +7,19 @@ public class MyStudent {
     private String branch;
     private long phone;
     private String imageUrl;
-    //private int profPic;
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    public MyStudent(String name, int enroll, String branch, long phone, String imageUrl
+                      ) {
 
-    public MyStudent(String name, int enroll, String branch, long phone) {
         this.name = name;
         this.enroll = enroll;
         this.branch = branch;
         this.phone = phone;
-        //this.profPic = profPic;
+        this.imageUrl = imageUrl;
     }
 
-    public MyStudent() {
-    }
+
 
     public String getName() {
         return name;
@@ -64,7 +57,17 @@ public class MyStudent {
 //        return profPic;
 //    }
 //
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 //    public void setProfPic(int profPic) {
 //        this.profPic = profPic;
 //    }
+
+
 }

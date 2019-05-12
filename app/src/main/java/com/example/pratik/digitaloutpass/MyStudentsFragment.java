@@ -100,12 +100,12 @@ public class MyStudentsFragment extends Fragment {
                         for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
 
 
-
+                            String imgUrl = dataSnapshot1.child("imageUrl").getValue(String.class);
                             Student student = dataSnapshot1.getValue(Student.class);
                             if(!student.role.equals("STUDENT") ){
                                 continue;
                             }
-                            MyStudent mystudent = new MyStudent(student.getName(),student.enrollNo,student.branch,student.phoneNo);
+                            MyStudent mystudent = new MyStudent(student.getName(),student.enrollNo,student.branch,student.phoneNo,imgUrl);
                             myStudentList.add(mystudent);
 
                             mystudentAdapter = new MyStudentsAdapter(getActivity(),myStudentList);
