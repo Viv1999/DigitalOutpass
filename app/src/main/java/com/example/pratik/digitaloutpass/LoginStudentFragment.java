@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -80,16 +82,25 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        String udata="Forgot Password",udata2="New user? Signup";
+        SpannableString content = new SpannableString(udata);
+        SpannableString content2 = new SpannableString(udata2);
+        content.setSpan(new UnderlineSpan(), 0, udata.length(), 0);
+        content2.setSpan(new UnderlineSpan(), 0, udata2.length(), 0);
+
         View v = inflater.inflate(R.layout.fragment_login_student, container, false);
         etEmail = v.findViewById(R.id.etEmailLoginStudent);
         etPassword = v.findViewById(R.id.etPasswordLoginStudent);
         bLogin = v.findViewById(R.id.bLogin);
         tvForgot = v.findViewById(R.id.tvForgot);
+        tvGotToSignup = v.findViewById(R.id.tvGoToSignup);
+        tvForgot.setText(content);
+        tvGotToSignup.setText(content2);
         tvForgot.setOnClickListener(this);
         //bLoginAsWar = v.findViewById(R.id.bloginAsWarden);
         //bLoginAsWar.setOnClickListener(this);
         bLogin.setOnClickListener(this);
-        tvGotToSignup = v.findViewById(R.id.tvGoToSignup);
+
         tvGotToSignup.setOnClickListener(this);
 
         return  v;
@@ -142,21 +153,21 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
     private void forgotPassword(){
         String email = etEmail.getText().toString().trim();
         
-        if(email==null || email.length()==0){
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             etEmail.setError("Enter an email");
             etEmail.requestFocus();
+        }else {
+            mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getContext(), "Check your email", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
-        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(getContext(),"Check your email",Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(getContext(),task.getException().toString(),Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     private void clickOnLogin(){

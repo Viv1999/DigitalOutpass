@@ -141,7 +141,7 @@ public class VerificationFragment extends Fragment {
                     public void run() {
                         //Toast.makeText(getContext(), "aknf",Toast.LENGTH_SHORT).show();
                         if(user.isEmailVerified()){
-
+                            Toast.makeText(getContext(), "aknf",Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getContext(), MainActivity.class));
                         }
                         handler.postDelayed(this,500);
