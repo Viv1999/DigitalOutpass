@@ -328,9 +328,16 @@ public class MainActivity extends AppCompatActivity
                 etReturnDate.setError(null);
                 String to = etTo.getText().toString().trim();
                 String from  = etFrom.getText().toString().trim();
+                leaveDateCal.set(Calendar.MONTH, leaveDateCal.get(Calendar.MONTH)+1);
+                returnDateCal.set(Calendar.MONTH, returnDateCal.get(Calendar.MONTH)+1);
+                leaveDateCal.set(Calendar.HOUR_OF_DAY, 0);
+                leaveDateCal.set(Calendar.MINUTE, 0);
+                leaveDateCal.set(Calendar.SECOND, 0);
+                leaveDateCal.set(Calendar.MILLISECOND, 0);
                 Date leaveDate = leaveDateCal.getTime();
                 Date returnDate = returnDateCal.getTime();
-                if(validateDates(leaveDate, returnDate, etLeaveDate, etReturnDate)) {
+
+                if(validate(to,from,etTo,etFrom,leaveDate,returnDate,etLeaveDate,etReturnDate)) {
                     Outpass outpass = new Outpass(curUser.getUid(), to, from, leaveDate, returnDate, hostel);
                     myOutpasses.add(outpass.getId() + "");
                     myOutpassesRef.setValue(myOutpasses);
@@ -363,14 +370,50 @@ public class MainActivity extends AppCompatActivity
                 }
             }
 
-            private boolean validateDates(Date leaveDate, Date returnDate, EditText etLeaveDate, EditText etReturnDate) {
-                Date currentDate = new Date();
-                if(leaveDate.compareTo(currentDate)<0){
-                    etLeaveDate.setError("Should be present or future");
+            private boolean validate(String to, String from, EditText etTo, EditText etFrom, Date leaveDate, Date returnDate, EditText etLeaveDate, EditText etReturnDate) {
+                if(from.equals("")){
+                    etFrom.setError("Enter the source");
+                    etFrom.requestFocus();
+                    return false;
+                }
+                if(to.equals("")){
+                    etTo.setError("Enter the source");
+                    etTo.requestFocus();
                     return  false;
                 }
-                if(returnDate.compareTo(leaveDate)<0){
+
+                if(!validateDates(leaveDate,returnDate,etLeaveDate,etReturnDate)){
+                    return false;
+                }
+                return true;
+            }
+
+            private boolean validateDates(Date leaveDate, Date returnDate, EditText etLeaveDate, EditText etReturnDate) {
+                if(leaveDate==null || etLeaveDate.getText().toString().equals("")){
+                    etLeaveDate.setError("leave date can't be empty");
+                    etLeaveDate.requestFocus();
+                    return false;
+                }
+                if(returnDate==null || etReturnDate.getText().toString().equals("")){
+                    etReturnDate.setError("leave date can't be empty");
+                    etReturnDate.requestFocus();
+                    return false;
+                }
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(new Date());
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                Date currentDate = cal.getTime();
+                if(leaveDate.before(currentDate)){
+                    etLeaveDate.setError("Should be present or future");
+                    etLeaveDate.requestFocus();
+                    return  false;
+                }
+                if(returnDate.before(leaveDate)){
                     etReturnDate.setError("should be on or after leave");
+                    etReturnDate.requestFocus();
                     return false;
                 }
                 return  true;
