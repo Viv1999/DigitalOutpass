@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +20,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -93,23 +97,74 @@ public class VerificationFragment extends Fragment {
                 startActivity(new Intent(getContext(), MainActivity.class));
             }
             else{
-                tvEmailVer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-
-                                if(task.isSuccessful()) {
-                                    Toast.makeText(getContext(), "Email Sent", Toast.LENGTH_SHORT).show();
-                                    tvEmailVer.setText("Email Sent Please verify and login again");
-                                }
+//                tvEmailVer.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//
+//                                if(task.isSuccessful()) {
+//                                    Toast.makeText(getContext(), "Email Sent", Toast.LENGTH_SHORT).show();
+//                                    tvEmailVer.setText("Email Sent Please verify and login again");
+//                                }
+//                            }
+//                        });
+//
+//                    }
+//                });
+                    user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getContext(), "Verifiaction email sent",Toast.LENGTH_SHORT).show();
+                                tvEmailVer.setText("Email Sent Please verify and login again");
                             }
-                        });
+                        }
+                    });
+
+//                    new Timer().scheduleAtFixedRate(new TimerTask() {
+//                        @Override
+//                        public void run() {
+//                            if(user.isEmailVerified()){
+//                                startActivity(new Intent(getContext(), MainActivity.class));
+//                            }
+//                        }
+//                    },0,3000);
+            }
+
+
+
+                final Handler handler = new Handler();
+                final Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        //Toast.makeText(getContext(), "aknf",Toast.LENGTH_SHORT).show();
+                        if(user.isEmailVerified()){
+
+                            startActivity(new Intent(getContext(), MainActivity.class));
+                        }
+                        handler.postDelayed(this,500);
+
+
+
 
                     }
-                });
-            }
+                };
+
+                runnable.run();
+
+
+
+
+//            while(!(user.isEmailVerified())){
+//
+//            }
+//            startActivity(new Intent(getContext(), MainActivity.class));
+
+
+
+
         }
 
 

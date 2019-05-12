@@ -5,8 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="20dp"
+    android:layout_gravity="center"
     android:paddingTop="150dp"
     android:gravity="top"
+    android:background="@color/colorPrimary"
     tools:context=".VerificationFragment">
 
 
@@ -14,20 +16,15 @@
         android:id="@+id/tvEmailVer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Emai Not Verified (Click to verify)"
+        android:text=""
         android:textSize="24sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvWardenVer"
-        android:text="Hang tight Warden verification in progress"
-        android:textSize="24sp"/>
 
     <Button
         android:id="@+id/btnsignOutVer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SignOut" />
+
 
 </LinearLayout>

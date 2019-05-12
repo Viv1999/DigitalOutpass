@@ -110,6 +110,8 @@ public class EditProfileFragment extends Fragment {
         prof =v.findViewById(R.id.profPicSet);
         save = v.findViewById(R.id.btn_save_stu);
 
+        initialize();
+
 
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +133,10 @@ public class EditProfileFragment extends Fragment {
 
         return v;
 
+
+    }
+
+    private void initialize() {
 
     }
 

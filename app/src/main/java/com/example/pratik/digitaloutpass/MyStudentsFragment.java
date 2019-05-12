@@ -83,6 +83,8 @@ public class MyStudentsFragment extends Fragment {
 
         final FirebaseUser user = mAuth.getCurrentUser();
 
+
+
         userDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -100,7 +102,7 @@ public class MyStudentsFragment extends Fragment {
 
 
                             Student student = dataSnapshot1.getValue(Student.class);
-                            if(student.getId().equals(user.getUid())){
+                            if(!student.role.equals("STUDENT") ){
                                 continue;
                             }
                             MyStudent mystudent = new MyStudent(student.getName(),student.enrollNo,student.branch,student.phoneNo);
@@ -121,11 +123,15 @@ public class MyStudentsFragment extends Fragment {
 
             }
 
+
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
+
 
 
 
