@@ -54,6 +54,7 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
     EditText etPassword;
     Button bLogin;
     TextView tvGotToSignup;
+    TextView tvForgot;
     Button bLoginAsWar;
     DatabaseReference userDatabase;
     String getRole;
@@ -83,6 +84,8 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
         etEmail = v.findViewById(R.id.etEmailLoginStudent);
         etPassword = v.findViewById(R.id.etPasswordLoginStudent);
         bLogin = v.findViewById(R.id.bLogin);
+        tvForgot = v.findViewById(R.id.tvForgot);
+        tvForgot.setOnClickListener(this);
         //bLoginAsWar = v.findViewById(R.id.bloginAsWarden);
         //bLoginAsWar.setOnClickListener(this);
         bLogin.setOnClickListener(this);
@@ -127,11 +130,33 @@ public class LoginStudentFragment extends Fragment implements View.OnClickListen
                 break;
             //case R.id.bloginAsWarden:
                 //loginAsWarden();
+            case R.id.tvForgot:
+                forgotPassword();
         }
     }
 
     private void gotToSignup() {
         mListener.switchFragment();
+    }
+
+    private void forgotPassword(){
+        String email = etEmail.getText().toString().trim();
+        
+        if(email==null || email.length()==0){
+            etEmail.setError("Enter an email");
+            etEmail.requestFocus();
+        }
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(getContext(),"Check your email",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(),task.getException().toString(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void clickOnLogin(){
